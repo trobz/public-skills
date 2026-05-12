@@ -26,6 +26,27 @@
         "inspect",
         "data"
       ]
+    },
+    {
+      "name": "oca",
+      "source": "./plugins/oca",
+      "description": "OCA toolkit: scaffold OCA-compliant Odoo modules, audit existing modules, and update OCA repositories from the upstream template",
+      "version": "0.1.0",
+      "author": {
+        "name": "Trobz"
+      },
+      "category": "development",
+      "keywords": [
+        "odoo",
+        "oca",
+        "scaffold",
+        "new-module",
+        "module-creation",
+        "audit",
+        "conventions",
+        "copier",
+        "template"
+      ]
     }
   ]
 }

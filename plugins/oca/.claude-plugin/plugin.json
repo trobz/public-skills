@@ -1,0 +1,13 @@
+{
+    "name": "oca",
+    "description": "OCA toolkit: scaffold OCA-compliant Odoo modules, audit existing modules, and update OCA repositories from the upstream template",
+    "version": "0.1.0",
+    "author": {
+        "name": "Trobz"
+    },
+    "skills": [
+        "./skills/new-module",
+        "./skills/audit-module",
+        "./skills/repo-update"
+    ]
+}
