@@ -1,0 +1,10 @@
+[project]
+name = "utilities-pdf"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "pymupdf4llm",
+    "pytesseract",
+    "pdf2image",
+    "pdfplumber",
+]
