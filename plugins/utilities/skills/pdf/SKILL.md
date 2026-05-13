@@ -1,6 +1,6 @@
 ---
 name: utilities:pdf
-description: Convert PDFs to agent-ready Markdown , extract text from scanned PDFs (OCR), and extract tables. Use when the user needs to convert a PDF to Markdown for LLM/agent consumption, read text from a scanned PDF, or pull structured table data from a PDF.
+description: Convert PDFs to agent-ready Markdown with automatic footer cleanup, extract text from scanned PDFs (OCR), and extract tables. Use when the user needs to convert a PDF to clean Markdown for LLM/agent consumption, read text from a scanned PDF, or pull structured table data from a PDF.
 argument-hint: "<pdf_path> [markdown|ocr|tables] [--pages <range>] [--lang <code>] [--format csv|text] [--output <file>] [--output-dir <dir>] [--footer-pattern <regex>]"
 allowed-tools: Bash
 ---
@@ -21,7 +21,7 @@ Three focused operations for PDF document processing.
 
 ### Markdown — Convert PDF to Markdown (recommended default)
 
-Use for text-layer PDFs to get agent-ready Markdown with heading detection. Falls back to OCR for scanned PDFs (headings flatten to `##`).
+Use for text-layer PDFs to get agent-ready Markdown with heading detection. Falls back to OCR for scanned PDFs (headings flatten to `##`). Post-conversion cleanup is required for agent input; the script removes standalone page numbers and repeated footer-like lines by default.
 
 **Decision tree:**
 
@@ -39,8 +39,8 @@ uv run --project "${CLAUDE_PLUGIN_ROOT}/skills/pdf/scripts" python "${CLAUDE_PLU
 | Flag | Description | Default |
 |------|-------------|---------|
 | `--pages 1-3` | Page range (e.g. `1-3`, `2,4,6`) | All pages |
-| `--footer-pattern <regex>` | Regex to strip repeating footer noise | None |
-| `--no-clean` | Skip automatic page-number stripping | Off |
+| `--footer-pattern <regex>` | Regex to strip complex footer noise after automatic cleanup | None |
+| `--no-clean` | Skip automatic page-number and repeated-footer cleanup | Off |
 | `--output out.md` | Write result to file instead of stdout | stdout |
 
 **Examples:**
@@ -55,6 +55,13 @@ python pdf-to-markdown.py document.pdf --pages 1-5 --output doc.md
 # Strip custom footer pattern (e.g. separator + company name)
 python pdf-to-markdown.py document.pdf --footer-pattern "_{10,}.*?Trobz.*?\n"
 ```
+
+**Footer cleanup workflow:**
+
+1. Convert once with the default cleanup.
+2. Verify no repeated footer remains: `grep -c 'distinctive footer text' out.md` should return `0`.
+3. If a multi-line footer remains, rerun with `--footer-pattern '<regex>'`.
+4. Use `--no-clean` only when debugging raw PDF extraction output.
 
 ---
 

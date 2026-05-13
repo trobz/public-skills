@@ -2,8 +2,12 @@
 """Convert PDFs to Markdown using pymupdf4llm with footer noise removal."""
 
 import argparse
+from collections import Counter
 import re
 import sys
+
+
+REPEATED_FOOTER_MIN_COUNT = 3
 
 
 def check_deps():
@@ -26,9 +30,55 @@ def parse_pages(pages_str: str) -> list[int]:
     return pages
 
 
+def normalize_footer_candidate(line: str) -> str:
+    """Normalize quote markers and whitespace before comparing repeated lines."""
+    line = re.sub(r"^\s*>\s*", "", line)
+    return re.sub(r"\s+", " ", line).strip()
+
+
+def is_probable_footer_line(line: str) -> bool:
+    if not line:
+        return False
+
+    lower = line.lower()
+    has_separator = bool(re.search(r"[_\-\u2013\u2014]{8,}", line))
+    has_contact = bool(
+        re.search(
+            r"\b[\w.+-]+@[\w.-]+\.\w+\b|https?://|www\.|\b\w+\.\w{2,}\b",
+            lower,
+        )
+    )
+    has_footer_word = bool(re.search(r"\b(page|copyright|confidential|all rights reserved)\b", lower))
+    has_address_layout = line.count("|") >= 2
+
+    return has_separator or has_footer_word or (has_contact and has_address_layout)
+
+
+def remove_repeated_footer_lines(text: str) -> str:
+    lines = text.splitlines()
+    normalized_counts = Counter(
+        normalize_footer_candidate(line)
+        for line in lines
+        if normalize_footer_candidate(line)
+    )
+
+    cleaned_lines = []
+    for line in lines:
+        normalized = normalize_footer_candidate(line)
+        if (
+            normalized_counts[normalized] >= REPEATED_FOOTER_MIN_COUNT
+            and is_probable_footer_line(normalized)
+        ):
+            continue
+        cleaned_lines.append(line)
+
+    return "\n".join(cleaned_lines)
+
+
 def clean_footers(text: str, footer_pattern: str | None) -> str:
     # Strip standalone page numbers (e.g. lines with only digits)
     text = re.sub(r"(?m)^\s*\d+\s*$", "", text)
+    text = remove_repeated_footer_lines(text)
 
     if footer_pattern:
         text = re.sub(footer_pattern, "", text, flags=re.DOTALL | re.MULTILINE)

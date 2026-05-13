@@ -12,7 +12,7 @@ claude plugin install utilities
 
 | Skill | Description |
 |-------|-------------|
-| **pdf** | Convert PDFs to Markdown, extract OCR text from scanned PDFs, and extract tables |
+| **pdf** | Convert PDFs to clean Markdown, extract OCR text from scanned PDFs, and extract tables |
 
 ## Requirements
 
