@@ -668,7 +668,7 @@ wheels = [
 ]
 
 [[package]]
-name = "utilities-pdf"
+name = "utils-pdf"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

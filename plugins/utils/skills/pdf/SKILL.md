@@ -1,5 +1,5 @@
 ---
-name: utilities:pdf
+name: utils:pdf
 description: Convert PDFs to agent-ready Markdown with automatic footer cleanup, extract text from scanned PDFs (OCR), and extract tables. Use when the user needs to convert a PDF to clean Markdown for LLM/agent consumption, read text from a scanned PDF, or pull structured table data from a PDF.
 argument-hint: "<pdf_path> [markdown|ocr|tables] [--pages <range>] [--lang <code>] [--format csv|text] [--output <file>] [--output-dir <dir>] [--footer-pattern <regex>]"
 allowed-tools: Bash

@@ -1,11 +1,11 @@
-# Utilities Plugin
+# Utils Plugin
 
 General-purpose document and workflow utilities for code agents.
 
 ## Installation
 
 ```bash
-claude plugin install utilities
+claude plugin install utils
 ```
 
 ## Skills
@@ -22,7 +22,7 @@ claude plugin install utilities
 ## Usage
 
 ```text
-/utilities:pdf document.pdf markdown --output document.md
-/utilities:pdf scanned.pdf ocr --lang eng
-/utilities:pdf report.pdf tables --format csv
+/utils:pdf document.pdf markdown --output document.md
+/utils:pdf scanned.pdf ocr --lang eng
+/utils:pdf report.pdf tables --format csv
 ```
