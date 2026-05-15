@@ -33,6 +33,7 @@ npx skills add git@github.com:trobz/public-skills.git -a <agent> -g
 
 # Install a specific skill globally
 npx skills add git@github.com:trobz/public-skills.git --skill odooly -a <agent> -g
+npx skills add git@github.com:trobz/public-skills.git --skill pdf -a <agent> -g
 
 # Install to current project only (no -g flag)
 npx skills add git@github.com:trobz/public-skills.git -a <agent>
@@ -80,6 +81,35 @@ claude plugin install odoo
 ```
 
 Or ask naturally: "Show me all sale orders from partner Trobz"
+
+### Utils
+
+General-purpose document and workflow utilities for code agents.
+
+**Installation:**
+
+```bash
+claude plugin install utils
+```
+
+**Requirements:**
+
+- `uv` available in `$PATH`
+- For OCR: system `tesseract` binary
+
+**Skills:**
+
+| Skill | Description |
+|-------|-------------|
+| **pdf** | Convert PDFs to clean Markdown, extract OCR text from scanned PDFs, and extract tables |
+
+**Examples:**
+
+```text
+/utils:pdf document.pdf markdown --output document.md
+/utils:pdf scanned.pdf ocr --lang eng
+/utils:pdf report.pdf tables --format csv
+```
 
 ## Contributing
 

@@ -47,6 +47,24 @@
         "copier",
         "template"
       ]
+    },
+    {
+      "name": "utils",
+      "source": "./plugins/utils",
+      "description": "General-purpose document and workflow utilities for code agents",
+      "version": "0.1.0",
+      "author": {
+        "name": "Trobz"
+      },
+      "category": "productivity",
+      "keywords": [
+        "pdf",
+        "markdown",
+        "ocr",
+        "tables",
+        "documents",
+        "utilities"
+      ]
     }
   ]
 }
