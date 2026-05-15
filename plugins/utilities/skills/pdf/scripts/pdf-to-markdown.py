@@ -3,6 +3,8 @@
 
 import argparse
 from collections import Counter
+import contextlib
+import os
 import re
 import sys
 
@@ -88,6 +90,22 @@ def clean_footers(text: str, footer_pattern: str | None) -> str:
     return text.strip()
 
 
+@contextlib.contextmanager
+def _stdout_to_stderr():
+    """Redirect fd 1 to fd 2 at the OS level so C-extension progress messages
+    from pymupdf4llm/Tesseract go to stderr instead of polluting stdout."""
+    stdout_fd = sys.stdout.fileno()
+    saved_fd = os.dup(stdout_fd)
+    try:
+        sys.stdout.flush()
+        os.dup2(sys.stderr.fileno(), stdout_fd)
+        yield
+    finally:
+        sys.stdout.flush()
+        os.dup2(saved_fd, stdout_fd)
+        os.close(saved_fd)
+
+
 def pdf_to_markdown(pdf_path: str, pages: list[int] | None = None) -> str:
     import pymupdf4llm
 
@@ -96,7 +114,8 @@ def pdf_to_markdown(pdf_path: str, pages: list[int] | None = None) -> str:
         # pymupdf4llm uses 0-based page indices
         kwargs["pages"] = [p - 1 for p in pages]
 
-    return pymupdf4llm.to_markdown(pdf_path, **kwargs)
+    with _stdout_to_stderr():
+        return pymupdf4llm.to_markdown(pdf_path, **kwargs)
 
 
 def main():
