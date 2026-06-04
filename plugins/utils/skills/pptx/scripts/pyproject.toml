@@ -1,0 +1,10 @@
+[project]
+name = "utils-pptx"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "python-pptx",
+    "pdf2image",
+    "pytesseract",
+    "Pillow",
+]

@@ -51,17 +51,22 @@
     {
       "name": "utils",
       "source": "./plugins/utils",
-      "description": "General-purpose document and workflow utilities for code agents",
-      "version": "0.1.0",
+      "description": "General-purpose document and workflow utilities: PDF and PPTX to Markdown, OCR, table extraction, image extraction, and slide rendering",
+      "version": "0.2.0",
       "author": {
         "name": "Trobz"
       },
       "category": "productivity",
       "keywords": [
         "pdf",
+        "pptx",
+        "powerpoint",
+        "slides",
         "markdown",
         "ocr",
         "tables",
+        "images",
+        "render",
         "documents",
         "utilities"
       ]
