@@ -54,7 +54,7 @@ npx skills add ~/code/trobz/packages/public-skills -a <agent> -g
 
 ### Odoo
 
-Odoo data inspection and querying toolkit using the `odooly` CLI.
+Odoo data inspection, querying, and access-rights comparison toolkit using the `odooly` CLI.
 
 **Installation:**
 
@@ -78,6 +78,7 @@ claude plugin install odoo
 ```text
 /odoo:odooly search partners named John
 /odoo:odooly show sale orders in state done
+/odoo:odooly compare access rights between 2 envs
 ```
 
 Or ask naturally: "Show me all sale orders from partner Trobz"

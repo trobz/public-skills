@@ -1,6 +1,6 @@
 ---
 name: odooly
-description: Inspect and query data on Odoo objects using the odooly CLI. Use when the user mentions odooly explicitly, asks to connect to an Odoo instance/environment, or asks to query, inspect, search, read, list, or fetch data from an Odoo database. Also use when the user asks to copy product images between Odoo instances, or to list installed/available modules from an instance or environment. Trigger phrases include "connect to instance X", "in instance X list/show/find ...", "on ENV check ...", "query ENV for ...", "copy product images between X and Y", "sync images from X to Y", "list modules on ENV", "show installed modules in X", "which modules are installed on Y", "list modules from instance Z".
+description: Inspect and query data on Odoo objects using the odooly CLI. Use when the user mentions odooly explicitly, asks to connect to an Odoo instance/environment, or asks to query, inspect, search, read, list, or fetch data from an Odoo database. Also use when the user asks to copy product images between Odoo instances, to list installed/available modules from an instance or environment, or to compare access rights/permissions/security groups between two Odoo instances. Trigger phrases include "connect to instance X", "in instance X list/show/find ...", "on ENV check ...", "query ENV for ...", "copy product images between X and Y", "sync images from X to Y", "list modules on ENV", "show installed modules in X", "which modules are installed on Y", "list modules from instance Z", "compare access rights between X and Y", "diff ACLs/permissions between X and Y", "what group permissions changed between env A and env B", "check if roles are consistent across instances".
 allowed-tools: Bash(odooly:*), Bash(python*:*), Question
 ---
 
@@ -162,7 +162,8 @@ odooly -c ~/odooly.ini --env staging -m sale.order -f name -f state "state=done"
 **Interactive session:**
 
 ```bash
-odooly -c ~/odooly.ini --env production -i
+# Running odooly with no query positional args drops into an interactive REPL
+odooly -c ~/odooly.ini --env production
 ```
 
 ### 5. Execute and Report
@@ -258,6 +259,67 @@ python scripts/list_modules.py -c ~/odooly.ini --env production --format csv --c
 
 # With repo detection and CLOC from local project
 python scripts/list_modules.py -c ~/odooly.ini --env production --project-dir ~/code/myproject --format csv --columns repo,module,version,cloc
+```
+
+## Compare Access Rights Between Two Instances
+
+When the user asks to compare access rights, permissions, or security configuration between two Odoo instances (e.g. "compare access rights between 2 envs", "diff ACLs between X and Y", "what group permissions changed between env A and env B", "check if roles are consistent across instances"), use the bundled script at `scripts/compare_access_rights.py` (relative to this skill's directory). **Do not use plain `odooly` commands for this — always use `compare_access_rights.py`.**
+
+The script compares 5 kinds of access-rights data between two environments:
+
+- `access` — `ir.model.access` (ACL: read/write/create/unlink per model+group)
+- `rule` — `ir.rule` (record rules / domains)
+- `groups` — `res.groups` (the groups themselves: name, category)
+- `users` — `res.users.groups_id` (which internal, non-share user belongs to which groups)
+- `roles` — `res.users.role.line` (OCA `base_user_role`, if installed; silently skipped if the model doesn't exist on an environment)
+
+Records are matched between the two environments by **XML ID** first (falling back to a natural key — e.g. group `full_name`, user `login` — when no XML ID exists on either side), never by raw database `id`, since the two environments are normally independent databases where numeric ids don't correspond to the same record.
+
+### Usage
+
+```bash
+python scripts/compare_access_rights.py -c ~/odooly.ini --env-a ENV_A --env-b ENV_B [OPTIONS]
+```
+
+### Options
+
+| Flag | Purpose | Default |
+|------|---------|---------|
+| `-c`, `--config` | Config file path | `odooly.ini` |
+| `--env-a` | First environment (required) | — |
+| `--env-b` | Second environment (required) | — |
+| `--types` | Comma-separated subset: `access,rule,groups,users,roles` | all 5 |
+| `--model` | Restrict `access`/`rule` comparison to one model (technical name) | — |
+| `--include-core` | Include ACL/rules belonging to core CE/EE modules | excluded by default |
+| `--format table\|csv` | Output format | `table` |
+| `--full` | Also show fields that are identical, not just differences | differences only |
+| `--output` | Write output to a file instead of stdout | — |
+
+### Workflow
+
+1. Extract the two environment names from the user's request.
+2. If unsure which environments exist, list them first: `odooly -c ~/odooly.ini --list`
+3. Run with sensible defaults (all 5 types, core modules excluded, differences only).
+4. If the user only cares about one kind (e.g. "just compare the groups"), narrow with `--types`.
+5. If the user wants to include Odoo's own core ACL/rules (rare — usually noise when the two environments run different Odoo versions), add `--include-core`.
+6. For large result sets, suggest `--format csv --output <file>` so the user can filter/sort in a spreadsheet.
+
+### Examples
+
+```bash
+# Compare everything between two environments (differences only)
+python scripts/compare_access_rights.py -c ~/odooly.ini --env-a ENV_A --env-b ENV_B
+
+# Only compare groups
+python scripts/compare_access_rights.py -c ~/odooly.ini --env-a ENV_A --env-b ENV_B --types groups
+
+# Only ACL and record rules for one model
+python scripts/compare_access_rights.py -c ~/odooly.ini --env-a ENV_A --env-b ENV_B \
+  --types access,rule --model sale.order
+
+# Full CSV export (including identical fields) for offline review
+python scripts/compare_access_rights.py -c ~/odooly.ini --env-a ENV_A --env-b ENV_B \
+  --format csv --full --output /tmp/access_rights_diff.csv
 ```
 
 ## Copy Product Images Between Instances

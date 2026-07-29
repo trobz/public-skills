@@ -1,6 +1,6 @@
 # Odoo Plugin
 
-Odoo data inspection and querying toolkit using the `odooly` CLI.
+Odoo data inspection, querying, and access-rights comparison toolkit using the `odooly` CLI.
 
 ## Requirements
 
@@ -25,6 +25,7 @@ claude plugin install odoo
 /odoo:odooly search partners named John
 /odoo:odooly show sale orders in state done
 /odoo:odooly list products with name containing "cable"
+/odoo:odooly compare access rights between 2 envs
 ```
 
 Or simply ask to query Odoo data in natural language:
