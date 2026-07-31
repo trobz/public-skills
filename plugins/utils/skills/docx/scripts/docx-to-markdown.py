@@ -1,0 +1,308 @@
+#!/usr/bin/env python3
+"""Convert a DOCX file to clean Markdown."""
+
+import argparse
+import re
+import sys
+import zipfile
+from pathlib import Path
+
+
+def check_deps():
+    try:
+        from docx import Document  # noqa: F401
+        from lxml import etree  # noqa: F401
+    except ImportError as e:
+        print(f"Missing package: {e.name}", file=sys.stderr)
+        print(
+            f'Install with: uv sync --project "{Path(__file__).parent}"',
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+
+def _extract_rId_map(docx_path: Path) -> dict[str, str]:
+    """Parse document.xml.rels → {rId: image_filename}."""
+    from lxml import etree
+
+    rId_map: dict[str, str] = {}
+    with zipfile.ZipFile(docx_path) as z:
+        try:
+            with z.open("word/_rels/document.xml.rels") as f:
+                tree = etree.parse(f)
+            for rel in tree.getroot():
+                rid = rel.get("Id")
+                target = rel.get("Target", "")
+                if "media/" in target:
+                    rId_map[rid] = Path(target).name
+        except KeyError:
+            pass
+    return rId_map
+
+
+def runs_to_markdown(para_elem) -> str:
+    """Convert paragraph runs to markdown (bold, italic). Preserves soft line breaks."""
+    from docx.oxml.ns import qn
+
+    def _is_on(rpr, tag: str) -> bool:
+        """True if property is present and not explicitly disabled via w:val='0'."""
+        if rpr is None:
+            return False
+        elem = rpr.find(tag)
+        if elem is None:
+            return False
+        val = elem.get(qn("w:val"), "1")
+        return val.lower() not in ("0", "false", "off")
+
+    segments: list[tuple[bool, bool, str]] = []
+    for run in para_elem.findall(f".//{qn('w:r')}"):
+        rpr = run.find(qn("w:rPr"))
+        is_bold = _is_on(rpr, qn("w:b"))
+        is_italic = _is_on(rpr, qn("w:i"))
+        for child in run:
+            tag = child.tag.split("}")[-1] if "}" in child.tag else child.tag
+            if tag == "t":
+                text = child.text or ""
+                if not text:
+                    continue
+                if (
+                    segments
+                    and segments[-1][0] == is_bold
+                    and segments[-1][1] == is_italic
+                    and segments[-1][2] != "\n"
+                ):
+                    segments[-1] = (is_bold, is_italic, segments[-1][2] + text)
+                else:
+                    segments.append((is_bold, is_italic, text))
+            elif tag == "br":
+                segments.append((False, False, "\n"))
+
+    # Normalize punctuation-only segments: adopt formatting of adjacent content segment.
+    # Word often gives quotes/parens a different bold/italic than the surrounding word,
+    # producing malformed markers like ***"****text*. Fix by inheriting neighbor's format.
+    _PUNCT = frozenset('"""\'\'\'(),.:;!?–—*_`~')
+    if len(segments) > 1:
+        normalized = list(segments)
+        for _ in range(2):  # two passes to handle edges
+            for i, (b, it, txt) in enumerate(normalized):
+                if txt == "\n":
+                    continue
+                if all(c in _PUNCT or c.isspace() for c in txt):
+                    left = normalized[i - 1] if i > 0 and normalized[i - 1][2] != "\n" else None
+                    right = normalized[i + 1] if i < len(normalized) - 1 and normalized[i + 1][2] != "\n" else None
+                    neighbor = right or left
+                    if neighbor and (neighbor[0] != b or neighbor[1] != it):
+                        normalized[i] = (neighbor[0], neighbor[1], txt)
+        # Re-merge adjacent segments with same formatting
+        merged: list[tuple[bool, bool, str]] = []
+        for seg in normalized:
+            if merged and merged[-1][0] == seg[0] and merged[-1][1] == seg[1] and merged[-1][2] != "\n" and seg[2] != "\n":
+                merged[-1] = (seg[0], seg[1], merged[-1][2] + seg[2])
+            else:
+                merged.append(seg)
+        segments = merged
+
+    parts = []
+    for is_bold, is_italic, text in segments:
+        if text == "\n":
+            parts.append("\n")
+            continue
+        stripped = text.strip()
+        if not stripped:
+            parts.append(text)
+            continue
+        lead = text[: len(text) - len(text.lstrip())]
+        trail = text[len(text.rstrip()) :]
+        if is_bold and is_italic:
+            parts.append(f"{lead}***{stripped}***{trail}")
+        elif is_bold:
+            parts.append(f"{lead}**{stripped}**{trail}")
+        elif is_italic:
+            parts.append(f"{lead}*{stripped}*{trail}")
+        else:
+            parts.append(text)
+    return "".join(parts).strip()
+
+
+def find_images_in_para(para_elem, rId_map: dict) -> list[str]:
+    """Return image filenames referenced in this paragraph."""
+    images = []
+    for blip in para_elem.iter(
+        "{http://schemas.openxmlformats.org/drawingml/2006/main}blip"
+    ):
+        rid = blip.get(
+            "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed"
+        )
+        if rid and rid in rId_map:
+            images.append(rId_map[rid])
+    return images
+
+
+def _cell_to_md(cell) -> str:
+    """Convert a table cell to markdown, preserving bold/italic formatting."""
+    parts = [runs_to_markdown(p._element) for p in cell.paragraphs]
+    return " ".join(p for p in parts if p)
+
+
+def table_to_markdown(table) -> str:
+    """Convert a docx table to a markdown pipe table."""
+    rows = table.rows
+    if not rows:
+        return ""
+    lines = []
+    for i, row in enumerate(rows):
+        cells = [_cell_to_md(cell).replace("\n", " ") for cell in row.cells]
+        lines.append("| " + " | ".join(cells) + " |")
+        if i == 0:
+            lines.append("| " + " | ".join(["---"] * len(cells)) + " |")
+    return "\n".join(lines)
+
+
+def heading_level(style_name: str) -> int:
+    """Return heading level (1–4) or 0 for non-headings."""
+    m = re.match(r"[Hh]eading\s*(\d)", style_name)
+    return int(m.group(1)) if m else 0
+
+
+def _slugify(text: str) -> str:
+    """Convert heading text to a URL-friendly anchor slug."""
+    text = text.lower().strip()
+    text = re.sub(r"[^\w\s-]", "", text)
+    text = re.sub(r"[\s_]+", "-", text)
+    return text.strip("-")
+
+
+def convert(
+    docx_path: Path,
+    image_prefix: str = "images/",
+    toc: bool = False,
+) -> str:
+    """Convert a DOCX file to a single Markdown string."""
+    from docx import Document
+
+    rId_map = _extract_rId_map(docx_path)
+    doc = Document(docx_path)
+    body = doc.element.body
+
+    table_map = {id(tbl._tbl): tbl for tbl in doc.tables}
+    para_map = {id(para._element): para for para in doc.paragraphs}
+
+    items: list[dict] = []
+
+    for child in body:
+        tag = child.tag.split("}")[-1] if "}" in child.tag else child.tag
+
+        if tag == "p":
+            para = para_map.get(id(child))
+            if para is None:
+                continue
+            style = para.style.name if para.style else "normal"
+            level = heading_level(style)
+            images_in_para = find_images_in_para(child, rId_map)
+
+            if level:
+                text = para.text.strip()
+                if text:
+                    items.append({"kind": f"h{level}", "text": text, "level": level})
+            else:
+                md_text = runs_to_markdown(child)
+                for img in images_in_para:
+                    items.append({"kind": "image", "filename": img})
+                if md_text:
+                    has_numpr = (
+                        child.find(
+                            ".//{http://schemas.openxmlformats.org/wordprocessingml/2006/main}numPr"
+                        )
+                        is not None
+                    )
+                    indent_emu = para.paragraph_format.left_indent or 0
+                    list_level = 0
+                    if has_numpr and indent_emu:
+                        list_level = max(1, round(indent_emu / 457200))
+                    for sub in (s.strip() for s in md_text.split("\n") if s.strip()):
+                        items.append({"kind": "text", "text": sub, "list_level": list_level})
+
+        elif tag == "tbl":
+            tbl = table_map.get(id(child))
+            if tbl:
+                items.append({"kind": "table", "table": tbl})
+
+    output: list[str] = []
+
+    if toc:
+        headings = [it for it in items if it["kind"].startswith("h")]
+        if headings:
+            output.append("## Table of Contents\n")
+            for h in headings:
+                indent = "  " * (h["level"] - 1)
+                slug = _slugify(h["text"])
+                output.append(f"{indent}- [{h['text']}](#{slug})")
+            output.append("")
+
+    for item in items:
+        if item["kind"].startswith("h"):
+            prefix = "#" * item["level"]
+            output.append(f"\n{prefix} {item['text']}\n")
+        elif item["kind"] == "text":
+            lvl = item.get("list_level", 0)
+            if lvl > 0:
+                output.append("  " * (lvl - 1) + f"- {item['text']}")
+            else:
+                output.append(item["text"])
+        elif item["kind"] == "image":
+            alt = Path(item["filename"]).stem
+            output.append(f"\n![{alt}]({image_prefix}{item['filename']})\n")
+        elif item["kind"] == "table":
+            md = table_to_markdown(item["table"])
+            if md:
+                output.append(f"\n{md}\n")
+
+    result = "\n".join(output)
+    result = re.sub(r"\n{4,}", "\n\n\n", result)
+    # Reduce blank lines between consecutive images to a single newline
+    result = re.sub(
+        r"(!\[[^\]]*\]\([^)]*\))\n\n+(!\[[^\]]*\]\([^)]*\))",
+        r"\1\n\2",
+        result,
+    )
+    return result.strip()
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Convert DOCX to Markdown")
+    parser.add_argument("docx", help="Path to the DOCX file")
+    parser.add_argument(
+        "--image-prefix",
+        default="images/",
+        metavar="PREFIX",
+        help="Prefix for image references (default: images/)",
+    )
+    parser.add_argument(
+        "--toc",
+        action="store_true",
+        help="Prepend a Markdown table of contents",
+    )
+    parser.add_argument(
+        "--output",
+        help="Write output to this file instead of stdout",
+    )
+    args = parser.parse_args()
+
+    check_deps()
+
+    docx_path = Path(args.docx)
+    if not docx_path.exists():
+        print(f"Error: file not found: {docx_path}", file=sys.stderr)
+        sys.exit(1)
+
+    md = convert(docx_path, image_prefix=args.image_prefix, toc=args.toc)
+
+    if args.output:
+        Path(args.output).write_text(md, encoding="utf-8")
+        print(f"Markdown written to: {args.output}")
+    else:
+        print(md)
+
+
+if __name__ == "__main__":
+    main()
