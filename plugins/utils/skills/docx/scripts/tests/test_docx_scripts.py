@@ -153,6 +153,73 @@ class TestRunsToMarkdown:
 
 
 # ---------------------------------------------------------------------------
+# escape_leading_list_marker
+# ---------------------------------------------------------------------------
+
+class TestEscapeLeadingListMarker:
+    def test_escapes_digit_dot_prefix(self):
+        result = docx_to_md.escape_leading_list_marker("14. In Jeunes Travailleurs column:")
+        assert result == "14\\. In Jeunes Travailleurs column:"
+
+    def test_escapes_digit_paren_prefix(self):
+        result = docx_to_md.escape_leading_list_marker("1) First step")
+        assert result == "1\\) First step"
+
+    def test_leaves_plain_text_untouched(self):
+        text = "In Jeunes Travailleurs column:"
+        assert docx_to_md.escape_leading_list_marker(text) == text
+
+    def test_leaves_digit_without_trailing_space_untouched(self):
+        text = "14.5kg of flour"
+        assert docx_to_md.escape_leading_list_marker(text) == text
+
+    def test_does_not_touch_number_mid_sentence(self):
+        text = "See step 14. for details"
+        assert docx_to_md.escape_leading_list_marker(text) == text
+
+    def test_produces_top_level_line_that_no_longer_starts_an_ordered_list(self):
+        # Regression test: a bare "14. text" line at the top of the document
+        # would otherwise be read by CommonMark as the start of a new
+        # ordered list instead of a plain paragraph.
+        escaped = docx_to_md.escape_leading_list_marker("14. In Jeunes Travailleurs column:")
+        assert escaped == "14\\. In Jeunes Travailleurs column:"
+
+
+# ---------------------------------------------------------------------------
+# strip_redundant_list_number
+# ---------------------------------------------------------------------------
+
+class TestStripRedundantListNumber:
+    def test_strips_digit_dot_prefix(self):
+        result = docx_to_md.strip_redundant_list_number("14. In Jeunes Travailleurs column:")
+        assert result == "In Jeunes Travailleurs column:"
+
+    def test_strips_digit_paren_prefix(self):
+        result = docx_to_md.strip_redundant_list_number("1) First step")
+        assert result == "First step"
+
+    def test_leaves_plain_text_untouched(self):
+        text = "In Jeunes Travailleurs column:"
+        assert docx_to_md.strip_redundant_list_number(text) == text
+
+    def test_leaves_digit_without_trailing_space_untouched(self):
+        text = "14.5kg of flour"
+        assert docx_to_md.strip_redundant_list_number(text) == text
+
+    def test_does_not_touch_number_mid_sentence(self):
+        text = "See step 14. for details"
+        assert docx_to_md.strip_redundant_list_number(text) == text
+
+    def test_produces_single_bullet_with_no_redundant_number(self):
+        # Regression test: rendering "- 14. text" through a CommonMark parser
+        # used to produce <li><ol start="14"><li>text</li></ol></li> (two
+        # stacked bullets). Stripping the number yields one clean bullet.
+        stripped = docx_to_md.strip_redundant_list_number("14. In Jeunes Travailleurs column:")
+        bullet_line = f"- {stripped}"
+        assert bullet_line == "- In Jeunes Travailleurs column:"
+
+
+# ---------------------------------------------------------------------------
 # find_images_in_para
 # ---------------------------------------------------------------------------
 
