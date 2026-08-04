@@ -32,6 +32,14 @@ from manifestoo_core.core_addons import is_core_ce_addon, is_core_ee_addon
 from manifestoo_core.odoo_series import OdooSeries
 
 
+# Separator used to join a user's group names into a single CSV field
+# (fetch_user_groups). Group full_name can itself contain a comma (e.g.
+# "View Member SmartButton (Account Analytic, Archive)"), so joining/splitting
+# on ", " is ambiguous. " | " is far less likely to collide and is what
+# generate_html_report.py expects when it splits this field back into a list.
+GROUP_LIST_SEP = " | "
+
+
 def get_odoo_series(client):
     major_minor = f"{int(client.version_info)}.0"
     return OdooSeries(major_minor)
@@ -169,7 +177,7 @@ def fetch_user_groups(client, model_filter=None, include_archived_users=False, *
     items = []
     for r in raw:
         groups = sorted(group_name.get(gid, str(gid)) for gid in r["groups_id"].ids)
-        fields = {"groups": ", ".join(groups)}
+        fields = {"groups": GROUP_LIST_SEP.join(groups)}
         items.append({
             "res_id": None,
             "xmlids": set(),  # matched by login only, no XML ID for users

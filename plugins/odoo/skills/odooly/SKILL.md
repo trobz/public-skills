@@ -1,6 +1,6 @@
 ---
 name: odooly
-description: Inspect and query data on Odoo objects using the odooly CLI. Use when the user mentions odooly explicitly, asks to connect to an Odoo instance/environment, or asks to query, inspect, search, read, list, or fetch data from an Odoo database. Also use when the user asks to copy product images between Odoo instances, to list installed/available modules from an instance or environment, or to compare access rights/permissions/security groups between two Odoo instances. Trigger phrases include "connect to instance X", "in instance X list/show/find ...", "on ENV check ...", "query ENV for ...", "copy product images between X and Y", "sync images from X to Y", "list modules on ENV", "show installed modules in X", "which modules are installed on Y", "list modules from instance Z", "compare access rights between X and Y", "diff ACLs/permissions between X and Y", "what group permissions changed between env A and env B", "check if roles are consistent across instances".
+description: Inspect and query data on Odoo objects using the odooly CLI. Use when the user mentions odooly explicitly, asks to connect to an Odoo instance/environment, or asks to query, inspect, search, read, list, or fetch data from an Odoo database. Also use when the user asks to copy product images between Odoo instances, to list installed/available modules from an instance or environment, to compare access rights/permissions/security groups between two Odoo instances, or to turn an access rights diff into an HTML report. Trigger phrases include "connect to instance X", "in instance X list/show/find ...", "on ENV check ...", "query ENV for ...", "copy product images between X and Y", "sync images from X to Y", "list modules on ENV", "show installed modules in X", "which modules are installed on Y", "list modules from instance Z", "compare access rights between X and Y", "diff ACLs/permissions between X and Y", "what group permissions changed between env A and env B", "check if roles are consistent across instances", "generate an HTML report of the access rights diff", "make this diff into a report per user", "show roles assigned and group changes per user".
 allowed-tools: Bash(odooly:*), Bash(python*:*), Question
 ---
 
@@ -321,6 +321,46 @@ python scripts/compare_access_rights.py -c ~/odooly.ini --env-a ENV_A --env-b EN
 python scripts/compare_access_rights.py -c ~/odooly.ini --env-a ENV_A --env-b ENV_B \
   --format csv --full --output /tmp/access_rights_diff.csv
 ```
+
+## Generate an HTML Report from an Access Rights Diff
+
+When the user asks for a visual/HTML report of an access rights comparison (e.g. "make this into an HTML report", "generate a report I can send to the coop", "show the diff per user with roles and groups"), use the bundled script at `scripts/generate_html_report.py` (relative to this skill's directory) on the CSV produced by `compare_access_rights.py`. **Do not hand-roll HTML from the CSV — always use `generate_html_report.py`.**
+
+The report shows, per user with a changed group membership, two boxes:
+
+- **Roles assigned** — OCA `base_user_role` roles (`res.users.role.line`) enabled for that user in env B (the "after" side), from the CSV's `roles` rows.
+- **Consequence on groups (diff)** — the added/removed `res.groups`, from the CSV's `users`/`groups` rows.
+
+Users that exist in only one of the two environments (`missing_in_a`/`missing_in_b` on the `users` `(record)` rows — e.g. an account created or archived between the two envs) are **not** shown as a fake "N → 0 groups" change; they're listed separately in a collapsed "excluded" note, since that's an account-lifecycle fact, not a role/group diff.
+
+### Usage
+
+```bash
+# 1. Export the diff as CSV
+python scripts/compare_access_rights.py -c ~/odooly.ini --env-a ENV_A --env-b ENV_B \
+  --format csv --output /tmp/diff.csv
+
+# 2. Render it as HTML
+python scripts/generate_html_report.py --input /tmp/diff.csv --output /tmp/report.html \
+  --env-a ENV_A --env-b ENV_B --title "Coop Name - Role Migration Diff"
+```
+
+### Options
+
+| Flag | Purpose | Default |
+|------|---------|---------|
+| `--input` | CSV produced by `compare_access_rights.py --format csv` (required) | — |
+| `--output` | Path to write the HTML report to (required) | — |
+| `--title` | Report title | `Access Rights Diff` |
+| `--env-a` / `--env-b` | Labels for the two environments shown in the meta line | `env A (before)` / `env B (after)` |
+| `--group-sep` | Separator used to split the `users`/`groups` CSV field back into a list | `" \| "` (must match `GROUP_LIST_SEP` in `compare_access_rights.py`) |
+
+### Workflow
+
+1. Run `compare_access_rights.py` with `--format csv --output <file>` to get the raw diff (all 5 types, so both `users`/`groups` and `roles` rows are present — narrowing `--types` to exclude `users` or `roles` will leave one of the two report boxes empty).
+2. Run `generate_html_report.py` on that CSV with `--env-a`/`--env-b`/`--title` set to something meaningful for the coop/instance pair being compared.
+3. Open the resulting HTML file (or hand it to the user) — it's self-contained (inline CSS, no external assets) and adapts to light/dark mode.
+4. If the terminal output mentions excluded users (present in only one environment), mention this to the user — it usually means an account was created or archived between the two environments, not a role change; those users can be reviewed/deactivated manually if needed.
 
 ## Copy Product Images Between Instances
 
