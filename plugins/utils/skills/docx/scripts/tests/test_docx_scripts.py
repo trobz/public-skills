@@ -330,11 +330,14 @@ class TestExtractImages:
         docx_path.write_bytes(docx_bytes)
         output_dir = tmp_path / "imgs"
 
-        rId_map, count = extract_images_script.extract_images(docx_path, output_dir)
+        rId_map, count, reused = extract_images_script.extract_images(docx_path, output_dir)
 
         assert count == 2
-        assert (output_dir / "image1.png").read_bytes() == b"PNG_DATA"
-        assert (output_dir / "image2.png").read_bytes() == b"PNG_DATA2"
+        assert reused == 0
+        name1 = extract_images_script.content_hash_filename(b"PNG_DATA", "image1.png")
+        name2 = extract_images_script.content_hash_filename(b"PNG_DATA2", "image2.png")
+        assert (output_dir / name1).read_bytes() == b"PNG_DATA"
+        assert (output_dir / name2).read_bytes() == b"PNG_DATA2"
 
     def test_returns_correct_rId_map(self, tmp_path):
         docx_bytes = make_fake_docx(
@@ -344,19 +347,21 @@ class TestExtractImages:
         docx_path = tmp_path / "test.docx"
         docx_path.write_bytes(docx_bytes)
 
-        rId_map, _ = extract_images_script.extract_images(docx_path, tmp_path / "imgs")
+        rId_map, _, _ = extract_images_script.extract_images(docx_path, tmp_path / "imgs")
 
-        assert rId_map == {"rId1": "image1.png"}
+        expected_name = extract_images_script.content_hash_filename(b"x", "image1.png")
+        assert rId_map == {"rId1": expected_name}
 
     def test_no_rels_file_returns_empty_map(self, tmp_path):
         docx_bytes = make_fake_docx(media_files={"image1.png": b"x"})
         docx_path = tmp_path / "test.docx"
         docx_path.write_bytes(docx_bytes)
 
-        rId_map, count = extract_images_script.extract_images(docx_path, tmp_path / "imgs")
+        rId_map, count, reused = extract_images_script.extract_images(docx_path, tmp_path / "imgs")
 
         assert rId_map == {}
         assert count == 1
+        assert reused == 0
 
     def test_creates_output_dir_if_missing(self, tmp_path):
         docx_bytes = make_fake_docx()
@@ -367,3 +372,181 @@ class TestExtractImages:
         extract_images_script.extract_images(docx_path, output_dir)
 
         assert output_dir.exists()
+
+
+# ---------------------------------------------------------------------------
+# content_hash_filename
+# ---------------------------------------------------------------------------
+
+class TestContentHashFilename:
+    def test_same_bytes_same_extension_produce_same_filename(self):
+        a = docx_to_md.content_hash_filename(b"picture-bytes", "image1.png")
+        b = docx_to_md.content_hash_filename(b"picture-bytes", "image47.png")
+        assert a == b
+
+    def test_different_bytes_produce_different_filenames(self):
+        a = docx_to_md.content_hash_filename(b"picture-one", "image1.png")
+        b = docx_to_md.content_hash_filename(b"picture-two", "image1.png")
+        assert a != b
+
+    def test_preserves_and_lowercases_extension(self):
+        result = docx_to_md.content_hash_filename(b"data", "media/image1.JPG")
+        assert result.endswith(".jpg")
+
+    def test_stable_regardless_of_word_assigned_name(self):
+        # The whole point: the same picture re-exported under a different
+        # Word/Google-assigned rId name still maps to the same filename.
+        first_export = docx_to_md.content_hash_filename(b"same-picture", "image42.png")
+        second_export = docx_to_md.content_hash_filename(b"same-picture", "image1908.png")
+        assert first_export == second_export
+
+    def test_matches_extract_images_script_implementation(self):
+        # docx-to-markdown.py generates the ![alt](path) refs and
+        # extract-images.py generates the actual files — they must agree on
+        # a filename for the same bytes or the refs point nowhere.
+        data = b"some image bytes"
+        name = "image1339.png"
+        assert docx_to_md.content_hash_filename(data, name) == (
+            extract_images_script.content_hash_filename(data, name)
+        )
+
+
+# ---------------------------------------------------------------------------
+# _extract_rId_map
+# ---------------------------------------------------------------------------
+
+class TestExtractRIdMap:
+    def test_maps_rid_to_content_hash_filename(self, tmp_path):
+        docx_bytes = make_fake_docx(
+            media_files={"image1.png": b"PNG_DATA"},
+            rels={"rId1": "image1.png"},
+        )
+        docx_path = tmp_path / "test.docx"
+        docx_path.write_bytes(docx_bytes)
+
+        rId_map = docx_to_md._extract_rId_map(docx_path)
+
+        expected_name = docx_to_md.content_hash_filename(b"PNG_DATA", "image1.png")
+        assert rId_map == {"rId1": expected_name}
+
+    def test_agrees_with_extract_images_for_the_same_docx(self, tmp_path):
+        # docx-to-markdown.py's refs and extract-images.py's output files
+        # must reference the exact same filename for a given rId.
+        docx_bytes = make_fake_docx(
+            media_files={"image1.png": b"PNG_DATA", "image2.png": b"OTHER"},
+            rels={"rId1": "image1.png", "rId2": "image2.png"},
+        )
+        docx_path = tmp_path / "test.docx"
+        docx_path.write_bytes(docx_bytes)
+
+        from_convert_script = docx_to_md._extract_rId_map(docx_path)
+        from_extract_script, _, _ = extract_images_script.extract_images(docx_path, tmp_path / "imgs")
+
+        assert from_convert_script == from_extract_script
+
+
+# ---------------------------------------------------------------------------
+# build_existing_hash_index / reuse-existing-images
+# ---------------------------------------------------------------------------
+
+class TestReuseExistingImages:
+    def test_build_existing_hash_index_maps_hash_to_filename(self, tmp_path):
+        (tmp_path / "image238.png").write_bytes(b"PNG_DATA")
+        (tmp_path / "image404.png").write_bytes(b"OTHER_DATA")
+
+        index = docx_to_md.build_existing_hash_index(tmp_path)
+
+        assert index[docx_to_md.content_hash(b"PNG_DATA")] == "image238.png"
+        assert index[docx_to_md.content_hash(b"OTHER_DATA")] == "image404.png"
+
+    def test_missing_dir_returns_empty_index(self, tmp_path):
+        assert docx_to_md.build_existing_hash_index(tmp_path / "nope") == {}
+
+    def test_none_dir_returns_empty_index(self):
+        assert docx_to_md.build_existing_hash_index(None) == {}
+
+    def test_extract_rId_map_reuses_pre_migration_name_for_unchanged_image(self, tmp_path):
+        # The core scenario: an image untouched since before the switch to
+        # content-hash naming still carries an old Word-assigned name like
+        # "image238.png" on disk. A resync must keep that name, not rename it.
+        existing_dir = tmp_path / "existing"
+        existing_dir.mkdir()
+        (existing_dir / "image238.png").write_bytes(b"UNCHANGED_PICTURE")
+
+        docx_bytes = make_fake_docx(
+            media_files={"image1339.png": b"UNCHANGED_PICTURE"},
+            rels={"rId1": "image1339.png"},
+        )
+        docx_path = tmp_path / "test.docx"
+        docx_path.write_bytes(docx_bytes)
+
+        existing_index = docx_to_md.build_existing_hash_index(existing_dir)
+        rId_map = docx_to_md._extract_rId_map(docx_path, existing_index)
+
+        assert rId_map == {"rId1": "image238.png"}
+
+    def test_extract_rId_map_falls_back_to_hash_name_for_new_image(self, tmp_path):
+        existing_dir = tmp_path / "existing"
+        existing_dir.mkdir()
+        (existing_dir / "image238.png").write_bytes(b"SOME_OTHER_PICTURE")
+
+        docx_bytes = make_fake_docx(
+            media_files={"image1339.png": b"BRAND_NEW_PICTURE"},
+            rels={"rId1": "image1339.png"},
+        )
+        docx_path = tmp_path / "test.docx"
+        docx_path.write_bytes(docx_bytes)
+
+        existing_index = docx_to_md.build_existing_hash_index(existing_dir)
+        rId_map = docx_to_md._extract_rId_map(docx_path, existing_index)
+
+        expected = docx_to_md.content_hash_filename(b"BRAND_NEW_PICTURE", "image1339.png")
+        assert rId_map == {"rId1": expected}
+
+    def test_extract_images_skips_writing_reused_file(self, tmp_path):
+        existing_dir = tmp_path / "existing"
+        existing_dir.mkdir()
+        (existing_dir / "image238.png").write_bytes(b"UNCHANGED_PICTURE")
+
+        docx_bytes = make_fake_docx(
+            media_files={
+                "image1339.png": b"UNCHANGED_PICTURE",
+                "image1904.png": b"BRAND_NEW_PICTURE",
+            },
+            rels={"rId1": "image1339.png", "rId2": "image1904.png"},
+        )
+        docx_path = tmp_path / "test.docx"
+        docx_path.write_bytes(docx_bytes)
+
+        rId_map, count, reused = extract_images_script.extract_images(
+            docx_path, existing_dir, existing_images_dir=existing_dir
+        )
+
+        assert count == 2
+        assert reused == 1
+        assert rId_map["rId1"] == "image238.png"
+        new_name = extract_images_script.content_hash_filename(b"BRAND_NEW_PICTURE", "image1904.png")
+        assert rId_map["rId2"] == new_name
+        assert (existing_dir / new_name).read_bytes() == b"BRAND_NEW_PICTURE"
+        # The reused file must be untouched, not duplicated under a new name.
+        assert sorted(p.name for p in existing_dir.iterdir()) == sorted(["image238.png", new_name])
+
+    def test_convert_and_extract_scripts_agree_when_reusing(self, tmp_path):
+        existing_dir = tmp_path / "existing"
+        existing_dir.mkdir()
+        (existing_dir / "image238.png").write_bytes(b"UNCHANGED_PICTURE")
+
+        docx_bytes = make_fake_docx(
+            media_files={"image1339.png": b"UNCHANGED_PICTURE"},
+            rels={"rId1": "image1339.png"},
+        )
+        docx_path = tmp_path / "test.docx"
+        docx_path.write_bytes(docx_bytes)
+
+        existing_index = docx_to_md.build_existing_hash_index(existing_dir)
+        from_convert_script = docx_to_md._extract_rId_map(docx_path, existing_index)
+        from_extract_script, _, _ = extract_images_script.extract_images(
+            docx_path, existing_dir, existing_images_dir=existing_dir
+        )
+
+        assert from_convert_script == from_extract_script
