@@ -302,14 +302,31 @@ def convert(
                     list_level = 0
                     if has_numpr and indent_emu:
                         list_level = max(1, round(indent_emu / 457200))
-                    for sub in (s.strip() for s in md_text.split("\n") if s.strip()):
-                        items.append({"kind": "text", "text": sub, "list_level": list_level})
+                    lines = [s.strip() for s in md_text.split("\n") if s.strip()]
+                    for i, sub in enumerate(lines):
+                        items.append(
+                            {
+                                "kind": "text",
+                                "text": sub,
+                                "list_level": list_level,
+                                "new_para": i == 0,
+                            }
+                        )
 
         elif tag == "tbl":
             tbl = table_map.get(id(child))
             if tbl:
                 items.append({"kind": "table", "table": tbl})
 
+    return items_to_markdown(items, image_prefix=image_prefix, toc=toc)
+
+
+def items_to_markdown(
+    items: list[dict],
+    image_prefix: str = "images/",
+    toc: bool = False,
+) -> str:
+    """Assemble the intermediate item list (headings/text/images/tables) into markdown."""
     output: list[str] = []
 
     if toc:
@@ -322,25 +339,43 @@ def convert(
                 output.append(f"{indent}- [{h['text']}](#{slug})")
             output.append("")
 
+    prev_was_plain_para = False
     for item in items:
         if item["kind"].startswith("h"):
             prefix = "#" * item["level"]
             output.append(f"\n{prefix} {item['text']}\n")
+            prev_was_plain_para = False
         elif item["kind"] == "text":
             lvl = item.get("list_level", 0)
             if lvl > 0:
                 text = strip_redundant_list_number(item["text"])
                 output.append("  " * (lvl - 1) + f"- {text}")
+                prev_was_plain_para = False
             else:
                 text = escape_leading_list_marker(item["text"])
+                if item.get("new_para", True):
+                    # A new Word paragraph: separate it from the previous one
+                    # with a blank line, otherwise CommonMark treats the single
+                    # "\n" between them as a soft break (rendered as a mere
+                    # space) instead of starting a new paragraph.
+                    if prev_was_plain_para:
+                        output.append("")
+                elif output:
+                    # Continuation of the same Word paragraph via a soft line
+                    # break (<w:br/>): force a real line break instead of
+                    # letting CommonMark collapse the "\n" into a space.
+                    output[-1] = output[-1] + " \\"
                 output.append(text)
+                prev_was_plain_para = True
         elif item["kind"] == "image":
             alt = Path(item["filename"]).stem
             output.append(f"\n![{alt}]({image_prefix}{item['filename']})\n")
+            prev_was_plain_para = False
         elif item["kind"] == "table":
             md = table_to_markdown(item["table"])
             if md:
                 output.append(f"\n{md}\n")
+            prev_was_plain_para = False
 
     result = "\n".join(output)
     result = re.sub(r"\n{4,}", "\n\n\n", result)

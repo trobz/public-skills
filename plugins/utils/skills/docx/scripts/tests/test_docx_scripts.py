@@ -220,6 +220,47 @@ class TestStripRedundantListNumber:
 
 
 # ---------------------------------------------------------------------------
+# items_to_markdown
+# ---------------------------------------------------------------------------
+
+class TestItemsToMarkdown:
+    def test_separate_word_paragraphs_get_a_blank_line_between_them(self):
+        # Regression test: two distinct <w:p> paragraphs used to be joined by
+        # a single "\n", which CommonMark renders as a soft break (a mere
+        # space) instead of starting a new paragraph.
+        items = [
+            {"kind": "text", "text": "First paragraph.", "list_level": 0, "new_para": True},
+            {"kind": "text", "text": "Second paragraph.", "list_level": 0, "new_para": True},
+        ]
+        result = docx_to_md.items_to_markdown(items)
+        assert result == "First paragraph.\n\nSecond paragraph."
+
+    def test_soft_line_break_within_one_paragraph_becomes_hard_break(self):
+        items = [
+            {"kind": "text", "text": "line one", "list_level": 0, "new_para": True},
+            {"kind": "text", "text": "line two", "list_level": 0, "new_para": False},
+        ]
+        result = docx_to_md.items_to_markdown(items)
+        assert result == "line one \\\nline two"
+
+    def test_consecutive_list_items_are_not_separated_by_blank_lines(self):
+        items = [
+            {"kind": "text", "text": "First item", "list_level": 1, "new_para": True},
+            {"kind": "text", "text": "Second item", "list_level": 1, "new_para": True},
+        ]
+        result = docx_to_md.items_to_markdown(items)
+        assert result == "- First item\n- Second item"
+
+    def test_heading_then_paragraph_no_extra_blank_line(self):
+        items = [
+            {"kind": "h2", "text": "Title", "level": 2},
+            {"kind": "text", "text": "Body text.", "list_level": 0, "new_para": True},
+        ]
+        result = docx_to_md.items_to_markdown(items)
+        assert result == "## Title\n\nBody text."
+
+
+# ---------------------------------------------------------------------------
 # find_images_in_para
 # ---------------------------------------------------------------------------
 
