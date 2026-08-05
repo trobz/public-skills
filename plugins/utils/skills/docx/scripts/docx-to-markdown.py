@@ -40,6 +40,33 @@ def _extract_rId_map(docx_path: Path) -> dict[str, str]:
     return rId_map
 
 
+_LEADING_LIST_MARKER_RE = re.compile(r"^(\d{1,9})([.)])(\s)")
+
+
+def escape_leading_list_marker(text: str) -> str:
+    """Escape a leading '1.' / '1)' so CommonMark doesn't parse it as a nested list.
+
+    Word authors sometimes type manual numbering ("14. Some column:") inside a
+    plain paragraph. Emitting that text as-is at the start of a line lets
+    CommonMark read it as the start of a *new* ordered list rather than plain
+    text, so we escape the punctuation to keep it literal.
+    """
+    return _LEADING_LIST_MARKER_RE.sub(r"\1\\\2\3", text)
+
+
+def strip_redundant_list_number(text: str) -> str:
+    """Drop a manually-typed '14. ' / '14) ' prefix from a bullet item's text.
+
+    Word authors sometimes type manual numbering inside a paragraph that
+    already carries Word list (bullet) formatting. Rendered as markdown, the
+    "- " bullet already conveys enumeration, so the leading number is
+    redundant — and worse, "- 14. text" makes CommonMark read the bullet's
+    sole content as a *new* nested ordered list, producing two stacked
+    markers instead of one bullet. Stripping the number sidesteps both.
+    """
+    return _LEADING_LIST_MARKER_RE.sub("", text)
+
+
 def runs_to_markdown(para_elem) -> str:
     """Convert paragraph runs to markdown (bold, italic). Preserves soft line breaks."""
     from docx.oxml.ns import qn
@@ -246,9 +273,11 @@ def convert(
         elif item["kind"] == "text":
             lvl = item.get("list_level", 0)
             if lvl > 0:
-                output.append("  " * (lvl - 1) + f"- {item['text']}")
+                text = strip_redundant_list_number(item["text"])
+                output.append("  " * (lvl - 1) + f"- {text}")
             else:
-                output.append(item["text"])
+                text = escape_leading_list_marker(item["text"])
+                output.append(text)
         elif item["kind"] == "image":
             alt = Path(item["filename"]).stem
             output.append(f"\n![{alt}]({image_prefix}{item['filename']})\n")
