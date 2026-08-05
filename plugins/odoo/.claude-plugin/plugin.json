@@ -1,7 +1,7 @@
 {
     "name": "odoo",
-    "description": "Odoo data inspection and querying toolkit using odooly CLI",
-    "version": "0.1.0",
+    "description": "Odoo data inspection, querying, and access-rights comparison toolkit using odooly CLI",
+    "version": "0.2.0",
     "author": {
         "name": "Trobz"
     },

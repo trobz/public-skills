@@ -1,0 +1,10 @@
+[project]
+name = "odoo-odooly"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "odooly",
+    "click",
+    "manifestoo-core",
+    "requests",
+]
