@@ -2,6 +2,7 @@
 """Convert a DOCX file to clean Markdown."""
 
 import argparse
+import hashlib
 import re
 import sys
 import zipfile
@@ -21,22 +22,75 @@ def check_deps():
         sys.exit(1)
 
 
-def _extract_rId_map(docx_path: Path) -> dict[str, str]:
-    """Parse document.xml.rels → {rId: image_filename}."""
+def content_hash(data: bytes) -> str:
+    """First 16 hex chars of sha256(data) — the content-address for an image."""
+    return hashlib.sha256(data).hexdigest()[:16]
+
+
+def content_hash_filename(data: bytes, original_name: str) -> str:
+    """Content-addressed filename: sha256(bytes)[:16] + original extension.
+
+    DOCX files exported from Google Docs re-serialize word/document.xml and
+    every image relationship from scratch on each export, so Word-internal
+    names like "image1339.png" are arbitrary and shift for the whole document
+    even when only one paragraph changed. Hashing the actual image bytes
+    keeps the same picture mapped to the same filename across re-exports, so
+    re-running the conversion after a small edit only touches what changed.
+    """
+    ext = Path(original_name).suffix.lower()
+    return f"{content_hash(data)}{ext}"
+
+
+def build_existing_hash_index(existing_dir: "Path | None") -> dict[str, str]:
+    """Map content hash → filename for files already in existing_dir (top-level only).
+
+    Used to reuse whatever name an unchanged image already has on disk (even a
+    pre-migration Word-assigned name like "image238.png") instead of renaming
+    it to a fresh content-hash name — so a resync only touches images that
+    actually changed. Not recursive: existing_dir is expected to be the same
+    directory new images will be written into, so basenames stay valid against
+    a single --image-prefix.
+    """
+    index: dict[str, str] = {}
+    if not existing_dir or not existing_dir.is_dir():
+        return index
+    for f in existing_dir.iterdir():
+        if f.is_file():
+            index[content_hash(f.read_bytes())] = f.name
+    return index
+
+
+def _extract_rId_map(
+    docx_path: Path, existing_index: dict[str, str] | None = None
+) -> dict[str, str]:
+    """Parse document.xml.rels → {rId: image filename}.
+
+    Reuses an existing file's name when its content hash matches (see
+    build_existing_hash_index); otherwise falls back to a fresh
+    content-addressed filename.
+    """
     from lxml import etree
 
+    existing_index = existing_index or {}
     rId_map: dict[str, str] = {}
     with zipfile.ZipFile(docx_path) as z:
         try:
             with z.open("word/_rels/document.xml.rels") as f:
                 tree = etree.parse(f)
-            for rel in tree.getroot():
-                rid = rel.get("Id")
-                target = rel.get("Target", "")
-                if "media/" in target:
-                    rId_map[rid] = Path(target).name
         except KeyError:
-            pass
+            return rId_map
+        for rel in tree.getroot():
+            rid = rel.get("Id")
+            target = rel.get("Target", "")
+            if "media/" not in target:
+                continue
+            media_path = f"word/{target}"
+            try:
+                data = z.read(media_path)
+            except KeyError:
+                continue
+            h = content_hash(data)
+            rId_map[rid] = existing_index.get(h) or content_hash_filename(data, target)
     return rId_map
 
 
@@ -203,11 +257,13 @@ def convert(
     docx_path: Path,
     image_prefix: str = "images/",
     toc: bool = False,
+    existing_images_dir: Path | None = None,
 ) -> str:
     """Convert a DOCX file to a single Markdown string."""
     from docx import Document
 
-    rId_map = _extract_rId_map(docx_path)
+    existing_index = build_existing_hash_index(existing_images_dir)
+    rId_map = _extract_rId_map(docx_path, existing_index)
     doc = Document(docx_path)
     body = doc.element.body
 
@@ -315,6 +371,16 @@ def main():
         "--output",
         help="Write output to this file instead of stdout",
     )
+    parser.add_argument(
+        "--existing-images-dir",
+        metavar="DIR",
+        help=(
+            "Directory to check for already-present images (matched by content "
+            "hash) before naming a new one. Reuses that file's existing name in "
+            "the generated refs instead of renaming it — pass the same directory "
+            "you'll pass to extract-images.py's --output-dir so refs stay valid."
+        ),
+    )
     args = parser.parse_args()
 
     check_deps()
@@ -324,7 +390,13 @@ def main():
         print(f"Error: file not found: {docx_path}", file=sys.stderr)
         sys.exit(1)
 
-    md = convert(docx_path, image_prefix=args.image_prefix, toc=args.toc)
+    existing_images_dir = Path(args.existing_images_dir) if args.existing_images_dir else None
+    md = convert(
+        docx_path,
+        image_prefix=args.image_prefix,
+        toc=args.toc,
+        existing_images_dir=existing_images_dir,
+    )
 
     if args.output:
         Path(args.output).write_text(md, encoding="utf-8")
