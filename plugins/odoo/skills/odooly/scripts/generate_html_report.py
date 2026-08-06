@@ -41,9 +41,31 @@ def load_rows(input_path):
 
 
 def split_groups(value, sep):
+    """Split a joined group-name field back into individual names.
+
+    The CSV field was built by joining group full_names with `sep`, but a
+    group's own name can itself contain that separator (e.g. "View Member
+    SmartButton (Account Analytic, Archive)" with sep=", "), which chops it
+    into bogus fragments. As a defense (on top of using an unambiguous
+    GROUP_LIST_SEP going forward), re-merge consecutive fragments whose
+    parentheses don't balance until they do - this reconstructs names like
+    the one above even when the source CSV used the old ", " separator.
+    """
     if not value:
         return set()
-    return {g for g in (part.strip() for part in value.split(sep)) if g}
+    raw_parts = [p.strip() for p in value.split(sep)]
+    raw_parts = [p for p in raw_parts if p]
+
+    merged = []
+    buffer = None
+    for part in raw_parts:
+        buffer = part if buffer is None else f"{buffer}{sep}{part}"
+        if buffer.count("(") <= buffer.count(")"):
+            merged.append(buffer)
+            buffer = None
+    if buffer is not None:
+        merged.append(buffer)
+    return set(merged)
 
 
 def build_user_diffs(rows, group_sep):
