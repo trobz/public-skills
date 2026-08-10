@@ -1,0 +1,3172 @@
+account.group_account_basic:
+  name: Invoicing & Banks
+  also_named:
+  - Basic
+  - Invoicing & Banks
+  category: Invoicing
+  module: account
+  ce_or_ee: community
+  purpose: Day-to-day banking access covering bank statement reconciliation, batch payments, and online
+    bank synchronization, without full accounting configuration rights.
+  versions_seen:
+  - '18.0'
+  - '19.0'
+account.group_account_invoice:
+  name: Invoicing
+  also_named:
+  - Billing
+  category: Invoicing
+  module: account
+  ce_or_ee: community
+  purpose: Can create and manage customer invoices/vendor bills without full accounting configuration
+    access.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+account.group_account_manager:
+  name: Administrator
+  also_named:
+  - Billing Manager
+  - Billing Administrator
+  - Administrator
+  - Accountant
+  - Advisor
+  category: Invoicing
+  module: account
+  ce_or_ee: community
+  purpose: 'Full control over the Accounting/Invoicing app: chart of accounts, fiscal configuration, taxes,
+    closing periods, all journals.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+account.group_account_readonly:
+  name: Read-only
+  also_named:
+  - Show Accounting Features - Readonly
+  - Read-only
+  - Auditor
+  category: Invoicing
+  module: account
+  ce_or_ee: community
+  purpose: Read-only visibility into the full Accounting app (journals, reports) without edit rights.
+  versions_seen:
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+account.group_account_secured:
+  name: Show Inalterability Features
+  category: Extra Rights
+  module: account
+  ce_or_ee: community
+  purpose: Exposes the inalterability/hash-chain security features required for tamper-proof accounting
+    records in certain countries' anti-fraud legislation (e.g. France, Belgium).
+  versions_seen:
+  - '18.0'
+  - '19.0'
+account.group_account_user:
+  name: Bookkeeper
+  also_named:
+  - Show Full Accounting Features
+  - Bookkeeper
+  - Accountant
+  category: Invoicing
+  module: account
+  ce_or_ee: community
+  purpose: 'Day-to-day bookkeeping access: journal entries, reconciliation, invoices/bills, without full
+    administrator configuration rights.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+account.group_cash_rounding:
+  name: Allow the cash rounding management
+  category: Technical
+  module: account
+  ce_or_ee: community
+  purpose: Enables cash rounding configuration and its application on invoices/payments (rounding totals
+    to the nearest cash denomination).
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+account.group_delivery_invoice_address:
+  name: Delivery Address
+  category: Technical
+  module: account
+  ce_or_ee: community
+  purpose: Exposes separate delivery/invoice address selection on sales orders.
+  renamed_from:
+  - xml_id: sale.group_delivery_invoice_address
+    version: '16.0'
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+account.group_fiscal_year:
+  name: Allow to define fiscal years of more or less than a year
+  category: Technical
+  module: account
+  ce_or_ee: community
+  purpose: Allows configuring fiscal years that don't align with a standard 12-month calendar year.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+account.group_partial_purchase_deductibility:
+  name: Partial Purchase Deductibility
+  module: account
+  ce_or_ee: community
+  purpose: Enables partial VAT/tax deductibility configuration on purchases, for jurisdictions where only
+    part of input tax is deductible (e.g. mixed business/private use).
+  versions_seen:
+  - '19.0'
+account.group_products_in_bills:
+  name: Use products on vendor bills
+  category: Technical
+  module: account
+  ce_or_ee: community
+  purpose: Enables selecting products (not just accounts) on vendor bill lines.
+  removed_in:
+  - '13.0'
+  versions_seen:
+  - '12.0'
+account.group_purchase_receipts:
+  name: Purchase Receipt
+  category: Technical
+  module: account
+  ce_or_ee: community
+  purpose: Enables the purchase receipt document/report for vendor bills.
+  versions_seen:
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+account.group_sale_receipts:
+  name: Sale Receipt
+  category: Technical
+  module: account
+  ce_or_ee: community
+  purpose: Enables the sale receipt document/report for customer invoices.
+  versions_seen:
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+account.group_show_line_subtotals_tax_excluded:
+  name: Tax display B2B
+  category: Technical
+  module: account
+  ce_or_ee: community
+  purpose: Show line subtotals without taxes (B2B)
+  removed_in:
+  - '17.0'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+account.group_show_line_subtotals_tax_included:
+  name: Tax display B2C
+  category: Technical
+  module: account
+  ce_or_ee: community
+  purpose: Show line subtotals with taxes included (B2C)
+  removed_in:
+  - '17.0'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+account.group_validate_bank_account:
+  name: Validate bank account
+  category: Accounting
+  module: account
+  ce_or_ee: community
+  purpose: Can validate/verify a partner's bank account details before it is used for payments.
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+account.group_warning_account:
+  name: A warning can be set on a partner (Account)
+  category: Technical
+  module: account
+  ce_or_ee: community
+  purpose: Can configure a warning message that pops up when a specific partner is used on accounting
+    documents.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+account_accountant.group_fiscal_year:
+  name: Allow to define fiscal years of more or less than a year
+  category: Technical
+  module: account_accountant
+  ce_or_ee: enterprise
+  purpose: Allows configuring fiscal years that don't align with a standard 12-month calendar year.
+  versions_seen:
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+account_consolidation.group_consolidation_user:
+  name: Consolidation user
+  category: Invoicing
+  module: account_consolidation
+  ce_or_ee: enterprise
+  purpose: Can access and use the Accounting Consolidation app to consolidate financial statements across
+    multiple companies.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+analytic.group_analytic_accounting:
+  name: Analytic Accounting
+  category: Technical
+  module: analytic
+  ce_or_ee: community
+  purpose: Enables analytic accounting (cost/profit centers, analytic plans and distributions) across
+    documents.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+analytic.group_analytic_tags:
+  name: Analytic Accounting Tags
+  category: Technical
+  module: analytic
+  ce_or_ee: community
+  purpose: Enables tagging documents with analytic tags for cross-cutting cost analysis.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+api_doc.group_allow_doc:
+  name: Technical Documentation
+  module: api_doc
+  ce_or_ee: community
+  purpose: Grants access to the auto-generated API documentation pages for the database.
+  versions_seen:
+  - '19.0'
+appointment.group_appointment_manager:
+  name: Administrator
+  category: Appointment
+  module: appointment
+  ce_or_ee: enterprise
+  purpose: 'Full control over the Appointments app: all appointment types, availability configuration,
+    staff assignment.'
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+appointment.group_appointment_user:
+  name: User
+  category: Appointment
+  module: appointment
+  ce_or_ee: enterprise
+  purpose: Can manage their own appointment types and bookings.
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+appointment.group_calendar_manager:
+  name: Administrator
+  category: Online Appointment
+  module: appointment
+  ce_or_ee: enterprise
+  purpose: 'Full control over online appointment scheduling: appointment types, availability, and staff
+    calendars.'
+  versions_seen:
+  - '15.0'
+approvals.group_approval_manager:
+  name: Administrator
+  category: Approvals
+  module: approvals
+  ce_or_ee: enterprise
+  purpose: The user will have access to the approvals configuration.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+approvals.group_approval_user:
+  name: 'Officer: Approve all requests'
+  also_named:
+  - Approver
+  - 'Officer : Approve all requests'
+  category: Approvals
+  module: approvals
+  ce_or_ee: enterprise
+  purpose: The user will be able to access all requests and approve/refuse them.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+base.default_user_group:
+  name: Default access for new users
+  module: base
+  ce_or_ee: community
+  purpose: Technical anchor group whose implied_ids define what every newly created user is granted by
+    default; other modules' demo/setup data extend it to add default groups for new users.
+  versions_seen:
+  - '19.0'
+base.group_allow_export:
+  name: Allowed
+  also_named:
+  - Access to export feature
+  category: Technical
+  module: base
+  ce_or_ee: community
+  purpose: Allows exporting data (list views, reports) to file formats like CSV/XLSX.
+  versions_seen:
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+base.group_erp_manager:
+  name: Access Rights
+  category: Administration
+  module: base
+  ce_or_ee: community
+  purpose: Can manage groups and access rights for other users without full Settings/technical administrator
+    access.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+base.group_multi_company:
+  name: Multi Companies
+  category: Extra Rights
+  module: base
+  ce_or_ee: community
+  purpose: Allows a user to see and work across multiple companies in a multi-company database, instead
+    of being confined to one.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+base.group_multi_currency:
+  name: Multi Currencies
+  category: Extra Rights
+  module: base
+  ce_or_ee: community
+  purpose: Exposes multi-currency fields and configuration (e.g. document currency selection) beyond the
+    company's default currency.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+base.group_no_one:
+  name: Technical Features
+  category: Extra Rights
+  module: base
+  ce_or_ee: community
+  purpose: Unlocks developer/technical menus and fields (debug-adjacent tooling) normally hidden from
+    regular users; typically reserved for implementers/admins, not end users.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+base.group_partner_manager:
+  name: Creation
+  also_named:
+  - Contact Creation
+  category: Extra Rights
+  module: base
+  ce_or_ee: community
+  purpose: Can create and edit contacts (res.partner) freely; without it, contact creation may be restricted
+    depending on configuration.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+base.group_portal:
+  name: Role / Portal
+  also_named:
+  - Portal
+  category: User types
+  module: base
+  ce_or_ee: community
+  purpose: External users (customers, vendors) with restricted access to their own documents (orders,
+    invoices, tickets) through the portal, not the backend.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+base.group_private_addresses:
+  name: Access to Private Addresses
+  category: Technical
+  module: base
+  ce_or_ee: community
+  purpose: Grants access to view/manage private (personal) addresses on contacts, hidden from users without
+    this right.
+  removed_in:
+  - '17.0'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+base.group_public:
+  name: Role / Public
+  also_named:
+  - Public
+  category: User types
+  module: base
+  ce_or_ee: community
+  purpose: Anonymous website visitors. Grants only what is explicitly shared publicly (e.g. published
+    website pages, eCommerce catalog).
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+base.group_sanitize_override:
+  name: Bypass HTML Field Sanitize
+  module: base
+  ce_or_ee: community
+  purpose: Allows saving HTML field content without Odoo's automatic HTML sanitization/cleanup (e.g. for
+    advanced email template editing).
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+base.group_system:
+  name: Role / Administrator
+  also_named:
+  - Settings
+  category: Administration
+  module: base
+  ce_or_ee: community
+  purpose: 'Full technical administrator access: install/uninstall apps, manage users and all security
+    groups, edit system-wide configuration.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+base.group_user:
+  name: Role / User
+  also_named:
+  - Internal User
+  category: User types
+  module: base
+  ce_or_ee: community
+  purpose: Baseline group for any internal (non-portal, non-public) employee-type user. Implied by nearly
+    every functional group in Odoo; without it a user cannot access the backend at all.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+crm.group_use_lead:
+  name: Show Lead Menu
+  category: Technical
+  module: crm
+  ce_or_ee: community
+  purpose: Enables the separate "Leads" stage/menu ahead of Opportunities in the CRM pipeline.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+crm.group_use_recurring_revenues:
+  name: Show Recurring Revenues Menu
+  category: Technical
+  module: crm
+  ce_or_ee: community
+  purpose: Enables tracking of recurring revenue plans/fields on CRM opportunities.
+  versions_seen:
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+databases.group_databases_manager:
+  name: Administrator
+  module: databases
+  ce_or_ee: enterprise
+  purpose: Administrator can manage the client databases
+  versions_seen:
+  - '19.0'
+databases.group_databases_user:
+  name: User
+  module: databases
+  ce_or_ee: enterprise
+  purpose: User can access the client databases
+  versions_seen:
+  - '19.0'
+documents.group_documents_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Documents
+  module: documents
+  ce_or_ee: enterprise
+  purpose: 'Full control over the Documents app: all folders, access rules, tags, workflow actions, and
+    configuration.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+documents.group_documents_system:
+  name: System Administrator
+  category: Documents
+  module: documents
+  ce_or_ee: enterprise
+  purpose: Has full control over all document settings, folders, and user rights across the application.
+  versions_seen:
+  - '18.0'
+  - '19.0'
+documents.group_documents_user:
+  name: User
+  category: Documents
+  module: documents
+  ce_or_ee: enterprise
+  purpose: Can access and organize documents in the folders they've been granted access to.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+equity.group_equity_manager:
+  name: Manager
+  module: equity
+  ce_or_ee: enterprise
+  purpose: 'Full control over the Equity app: managing shareholder/equity records and configuration.'
+  versions_seen:
+  - '19.0'
+equity.group_equity_viewer:
+  name: Viewer
+  module: equity
+  ce_or_ee: enterprise
+  purpose: Read-only access to equity/shareholder records.
+  versions_seen:
+  - '19.0'
+esg.esg_group_manager:
+  name: Administrator
+  module: esg
+  ce_or_ee: enterprise
+  purpose: Full access to all ESG features including configuration rights.
+  versions_seen:
+  - '19.0'
+esg.esg_group_user:
+  name: User
+  module: esg
+  ce_or_ee: enterprise
+  purpose: Access to ESG features including viewing data, reporting, and mapping emissions with emissions
+    factors, but without configuration rights.
+  versions_seen:
+  - '19.0'
+esg_csrd.group_esg_csrd_reporting:
+  name: Enable CSRD reporting features
+  module: esg_csrd
+  ce_or_ee: enterprise
+  purpose: Enables CSRD (Corporate Sustainability Reporting Directive) compliance reporting features in
+    the ESG app.
+  versions_seen:
+  - '19.0'
+event.group_event_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Events
+  module: event
+  ce_or_ee: community
+  purpose: 'Full control over the Events app: all events, registrations, configuration, reporting.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+event.group_event_registration_desk:
+  name: Registration Desk
+  category: Events
+  module: event
+  ce_or_ee: community
+  purpose: Can operate the on-site registration desk to check in event attendees.
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+event.group_event_user:
+  name: User
+  category: Events
+  module: event
+  ce_or_ee: community
+  purpose: Can create and manage their own events and registrations.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+fleet.fleet_group_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Fleet
+  module: fleet
+  ce_or_ee: community
+  purpose: 'Full control over the Fleet app: all vehicles, contracts, drivers, and configuration.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+fleet.fleet_group_user:
+  name: 'Officer: Manage all vehicles'
+  also_named:
+  - User
+  - 'Officer : Manage all vehicles'
+  category: Fleet
+  module: fleet
+  ce_or_ee: community
+  purpose: Can create and manage vehicle records, without configuring fleet reference data (vehicle models,
+    tags, states).
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+frontdesk.frontdesk_group_administrator:
+  name: Administrator
+  category: Frontdesk
+  module: frontdesk
+  ce_or_ee: enterprise
+  purpose: 'Full control over the Frontdesk app: stations, visitor configuration, all check-ins.'
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+frontdesk.frontdesk_group_user:
+  name: User
+  category: Frontdesk
+  module: frontdesk
+  ce_or_ee: enterprise
+  purpose: Can view and manage visitor check-ins at their assigned front desk station.
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+helpdesk.group_auto_assignment:
+  name: Auto Assigment
+  category: Technical
+  module: helpdesk
+  ce_or_ee: enterprise
+  purpose: Enables automatic assignment of helpdesk tickets to team members.
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+helpdesk.group_helpdesk_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Helpdesk
+  module: helpdesk
+  ce_or_ee: enterprise
+  purpose: 'Full control over the Helpdesk app: all teams, tickets, configuration, reporting.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+helpdesk.group_helpdesk_user:
+  name: User
+  category: Helpdesk
+  module: helpdesk
+  ce_or_ee: enterprise
+  purpose: Can manage tickets for the helpdesk teams they're a member of.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+helpdesk.group_use_rating:
+  name: Show Customer Ratings
+  category: Technical
+  module: helpdesk
+  ce_or_ee: enterprise
+  purpose: Enables customer satisfaction ratings on helpdesk tickets.
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+helpdesk.group_use_sla:
+  name: Show SLA Policies
+  category: Technical
+  module: helpdesk
+  ce_or_ee: enterprise
+  purpose: Enables SLA (Service Level Agreement) policies on helpdesk tickets.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+helpdesk_sale.group_use_helpdesk_sale_timesheet:
+  name: Use Time Billing
+  category: Technical
+  module: helpdesk_sale
+  ce_or_ee: enterprise
+  purpose: Enables billing timesheets logged on helpdesk tickets back to the customer.
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+helpdesk_timesheet.group_use_helpdesk_timesheet:
+  name: Timesheets
+  category: Technical
+  module: helpdesk_timesheet
+  ce_or_ee: enterprise
+  purpose: Enables logging timesheets directly on helpdesk tickets.
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr.group_hr_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Employees
+  module: hr
+  ce_or_ee: community
+  purpose: 'Full control over the Employees app: all employee data, departments, configuration.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr.group_hr_user:
+  name: 'Officer: Manage all employees'
+  also_named:
+  - Officer
+  - 'Officer : Manage all employees'
+  category: Employees
+  module: hr
+  ce_or_ee: community
+  purpose: Can manage employee records (create/edit employees, departments, job positions) without full
+    administrator access.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_appraisal.group_hr_appraisal_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Appraisals
+  module: hr_appraisal
+  ce_or_ee: enterprise
+  purpose: 'Full control over the Appraisals app: all employees'' appraisals, templates, configuration.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_appraisal.group_hr_appraisal_user:
+  name: 'Officer: Access all appraisals'
+  also_named:
+  - Officer
+  - User
+  - Access all appraisals
+  - 'Officer : Access all appraisals'
+  category: Appraisals
+  module: hr_appraisal
+  ce_or_ee: enterprise
+  purpose: Can access and manage appraisals for all employees, not just their own team.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_attendance.group_hr_attendance:
+  name: User
+  also_named:
+  - Manual Attendance
+  category: Attendances
+  module: hr_attendance
+  ce_or_ee: community
+  purpose: The user will gain access to the human resources attendance menu, enabling him to manage his
+    own attendance.
+  renamed_to:
+  - xml_id: hr_attendance.group_hr_attendance_own_reader
+    version: '17.0'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+hr_attendance.group_hr_attendance_kiosk:
+  name: 'User : Only kiosk mode'
+  also_named:
+  - Kiosk Attendance
+  category: Attendances
+  module: hr_attendance
+  ce_or_ee: community
+  purpose: The user will be able to open the kiosk mode and validate the employee PIN.
+  renamed_to:
+  - xml_id: hr_attendance.group_hr_attendance_own_reader
+    version: '17.0'
+  versions_seen:
+  - '14.0'
+  - '15.0'
+  - '16.0'
+hr_attendance.group_hr_attendance_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Attendances
+  module: hr_attendance
+  ce_or_ee: community
+  purpose: 'Full control over the Attendances app: all employees'' attendance records and configuration.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_attendance.group_hr_attendance_officer:
+  name: 'Officer: Manage attendances'
+  category: Technical
+  module: hr_attendance
+  ce_or_ee: community
+  purpose: The user will have access to the attendance records and reporting of employees where he's set
+    as an attendance manager
+  renamed_from:
+  - xml_id: hr_attendance.group_hr_attendance_user
+    version: '17.0'
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_attendance.group_hr_attendance_own_reader:
+  name: 'User: Read his own attendances'
+  category: Technical
+  module: hr_attendance
+  ce_or_ee: community
+  purpose: The user will have access to his own attendances on his user / employee profile
+  renamed_from:
+  - xml_id: hr_attendance.group_hr_attendance
+    version: '17.0'
+  - xml_id: hr_attendance.group_hr_attendance_kiosk
+    version: '17.0'
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_attendance.group_hr_attendance_use_pin:
+  name: Enable PIN use
+  category: Technical
+  module: hr_attendance
+  ce_or_ee: community
+  purpose: The user will have to enter his PIN to check in and out manually at the company screen.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+hr_attendance.group_hr_attendance_user:
+  name: 'Officer: Manage all attendances'
+  also_named:
+  - Officer
+  - 'Officer : Manage all attendances'
+  category: Attendances
+  module: hr_attendance
+  ce_or_ee: community
+  purpose: Can manage attendance records for all employees, not just their own.
+  renamed_to:
+  - xml_id: hr_attendance.group_hr_attendance_officer
+    version: '17.0'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '19.0'
+hr_contract.group_hr_contract_employee_manager:
+  name: Employee Manager
+  category: Contracts
+  module: hr_contract
+  ce_or_ee: community
+  purpose: Can manage the employment contracts of employees they are a manager of.
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+hr_contract.group_hr_contract_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Contracts
+  module: hr_contract
+  ce_or_ee: community
+  purpose: Full control over all employees' employment contracts and related configuration.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+hr_contract_sign.group_sign_employee:
+  name: Employee
+  category: Sign
+  module: hr_contract_sign
+  ce_or_ee: enterprise
+  purpose: Allows an employee to sign their own contract-related documents electronically.
+  versions_seen:
+  - '13.0'
+hr_expense.group_hr_expense_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Expenses
+  module: hr_expense
+  ce_or_ee: community
+  purpose: 'Full control over the Expenses app: all expense reports, approvals, configuration.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_expense.group_hr_expense_team_approver:
+  name: Team Approver
+  category: Expenses
+  module: hr_expense
+  ce_or_ee: community
+  purpose: Can approve expense reports submitted by their own team members.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_expense.group_hr_expense_user:
+  name: All Approver
+  also_named:
+  - Officer
+  category: Expenses
+  module: hr_expense
+  ce_or_ee: community
+  purpose: Can approve expense reports from any employee, not just their own team.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_holidays.group_hr_holidays_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Time Off
+  module: hr_holidays
+  ce_or_ee: community
+  purpose: 'Full control over the Time Off app: leave types, allocations, all employees'' requests, configuration.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_holidays.group_hr_holidays_responsible:
+  name: Time Off Responsible
+  also_named:
+  - Responsible
+  category: Technical
+  module: hr_holidays
+  ce_or_ee: community
+  purpose: Marks a user as an approver responsible for validating specific employees' time off requests.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_holidays.group_hr_holidays_user:
+  name: 'Officer: Manage all requests'
+  also_named:
+  - Officer
+  - All Approver
+  - Time Off Officer
+  - 'Officer : Manage all requests'
+  category: Time Off
+  module: hr_holidays
+  ce_or_ee: community
+  purpose: Can validate/manage time off requests for their team or department.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_payroll.group_hr_payroll_employee_manager:
+  name: Manager
+  category: Payroll
+  module: hr_payroll
+  ce_or_ee: community
+  purpose: User can see his own contracts and the contracts of the people he's manager of.
+  versions_seen:
+  - '16.0'
+  - '17.0'
+hr_payroll.group_hr_payroll_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Payroll
+  module: hr_payroll
+  ce_or_ee: community
+  purpose: User have full access on the application.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_payroll.group_hr_payroll_user:
+  name: 'Officer: Manage all contracts'
+  also_named:
+  - Officer
+  - 'Officer : Manage all contracts'
+  category: Payroll
+  module: hr_payroll
+  ce_or_ee: community
+  purpose: User can manage all contracts, work entries and create payslips.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_payroll.group_payslip_display:
+  name: Display payslip PDF
+  category: Technical
+  module: hr_payroll
+  ce_or_ee: community
+  purpose: Allows viewing/printing employee payslips as PDF.
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_recruitment.group_applicant_cv_display:
+  name: Display CV on application form
+  category: Technical
+  module: hr_recruitment
+  ce_or_ee: community
+  purpose: Displays the applicant's CV/resume directly on the application form.
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_recruitment.group_hr_recruitment_interviewer:
+  name: Interviewer
+  also_named:
+  - Recruitment Interviewer
+  category: Recruitment
+  module: hr_recruitment
+  ce_or_ee: community
+  purpose: Can access and evaluate the applications they're assigned as an interviewer for.
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_recruitment.group_hr_recruitment_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Recruitment
+  module: hr_recruitment
+  ce_or_ee: community
+  purpose: 'Full control over the Recruitment app: all job positions, applicants, configuration.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_recruitment.group_hr_recruitment_user:
+  name: 'Officer: Manage all applicants'
+  also_named:
+  - Officer
+  - 'Officer : Manage all applicants'
+  category: Recruitment
+  module: hr_recruitment
+  ce_or_ee: community
+  purpose: Can manage applicants across all recruitment job positions, not just their own.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_referral.group_hr_recruitment_referral_user:
+  name: 'User: Referral only'
+  also_named:
+  - Referral User
+  - 'User : Referral only'
+  category: Referrals
+  module: hr_referral
+  ce_or_ee: enterprise
+  purpose: Can refer candidates for open positions through the Referrals app, without broader recruitment
+    access.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_referral.group_hr_referral_manager:
+  name: Administrator
+  module: hr_referral
+  ce_or_ee: enterprise
+  purpose: 'Full control over the Referrals app: campaigns, rewards, and configuration.'
+  versions_seen:
+  - '19.0'
+hr_referral.group_hr_referral_reward_responsible_user:
+  name: Referral Reward Responsible User
+  category: Technical
+  module: hr_referral
+  ce_or_ee: enterprise
+  purpose: Responsible for approving and delivering referral rewards to employees.
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_timesheet.group_hr_timesheet_approver:
+  name: 'User: all timesheets'
+  also_named:
+  - Approver
+  - 'User: all timesheets'
+  - Team Approver
+  category: Timesheets
+  module: hr_timesheet
+  ce_or_ee: community
+  purpose: Can view and validate timesheets logged by their team members.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_timesheet.group_hr_timesheet_user:
+  name: 'User: own timesheets only'
+  also_named:
+  - User
+  - See all Timesheets
+  - See own timesheets
+  category: Timesheets
+  module: hr_timesheet
+  ce_or_ee: community
+  purpose: Can log and manage only their own timesheets.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+hr_timesheet.group_timesheet_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Timesheets
+  module: hr_timesheet
+  ce_or_ee: community
+  purpose: Full control over all employees' timesheets and related configuration.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+im_livechat.im_livechat_group_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Live Chat
+  module: im_livechat
+  ce_or_ee: community
+  purpose: The user will be able to delete support channels.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+im_livechat.im_livechat_group_user:
+  name: User
+  category: Live Chat
+  module: im_livechat
+  ce_or_ee: community
+  purpose: The user will be able to join support channels.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+industry_fsm.group_fsm_manager:
+  name: Administrator
+  category: Field Service
+  module: industry_fsm
+  ce_or_ee: enterprise
+  purpose: 'Full control over the Field Service app: all tasks, technicians, configuration.'
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+industry_fsm.group_fsm_quotation_from_task:
+  name: Create new quotations directly from the tasks
+  category: Technical
+  module: industry_fsm
+  ce_or_ee: enterprise
+  purpose: Allows field service technicians to create new sales quotations directly from a field service
+    task.
+  versions_seen:
+  - '13.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+industry_fsm.group_fsm_user:
+  name: User
+  category: Field Service
+  module: industry_fsm
+  ce_or_ee: enterprise
+  purpose: Can manage the field service tasks assigned to them.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+industry_fsm_sale.group_fsm_quotation_from_task:
+  name: Create new quotations directly from the tasks
+  category: Technical
+  module: industry_fsm_sale
+  ce_or_ee: enterprise
+  purpose: Allows field service technicians to create new sales quotations directly from a field service
+    task.
+  versions_seen:
+  - '14.0'
+iot.group_iot_admin:
+  name: Administrator
+  module: iot
+  ce_or_ee: enterprise
+  purpose: Full control over IoT box configuration and connected devices.
+  versions_seen:
+  - '19.0'
+iot.group_iot_user:
+  name: User
+  module: iot
+  ce_or_ee: enterprise
+  purpose: Can use IoT-connected devices (scales, printers, scanners) without managing IoT box configuration.
+  versions_seen:
+  - '19.0'
+l10n_be_codabox_bridge.group_access_connection_settings:
+  name: Allow to show and modify the CodaBox Connection Settings
+  category: Accounting
+  module: l10n_be_codabox_bridge
+  ce_or_ee: enterprise
+  purpose: Can view and modify the CodaBox connection settings used for Belgian bank statement/invoice
+    data exchange.
+  versions_seen:
+  - '17.0'
+l10n_be_hr_payroll.group_export_sdworx_leaves:
+  name: Export Time Off to SDWorx
+  category: Technical
+  module: l10n_be_hr_payroll
+  ce_or_ee: community
+  purpose: Allows exporting Belgian employees' time off records to the SD Worx payroll service.
+  versions_seen:
+  - '16.0'
+l10n_in.group_l10n_in_reseller:
+  name: Manage Reseller(E-Commerce)
+  category: Technical
+  module: l10n_in
+  ce_or_ee: community
+  purpose: Enables e-commerce reseller-specific GST compliance fields and reports for the Indian localization.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+lunch.group_lunch_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Lunch
+  module: lunch
+  ce_or_ee: community
+  purpose: 'Full control over the Lunch app: vendors, products, orders, and configuration.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+lunch.group_lunch_user:
+  name: 'User : Order your meal'
+  also_named:
+  - User
+  category: Lunch
+  module: lunch
+  ce_or_ee: community
+  purpose: Can order meals through the Lunch app.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mail.group_mail_canned_response_admin:
+  name: Canned Response Administrator
+  category: Canned Responses
+  module: mail
+  ce_or_ee: community
+  purpose: Can create and manage canned (quick) responses shared across all users.
+  versions_seen:
+  - '18.0'
+  - '19.0'
+mail.group_mail_notification_type_inbox:
+  name: Receive notifications in Odoo
+  category: Technical
+  module: mail
+  ce_or_ee: community
+  purpose: Marks a user as receiving notifications in their Odoo inbox instead of by email.
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mail.group_mail_template_editor:
+  name: Mail Template Editor
+  category: Technical
+  module: mail
+  ce_or_ee: community
+  purpose: Can create and edit email templates used across the database.
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mail_group.group_mail_group_manager:
+  name: Mail Group Administrator
+  category: Extra Rights
+  module: mail_group
+  ce_or_ee: community
+  purpose: 'Full control over mailing/discussion groups: members, moderation, configuration.'
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+maintenance.group_equipment_manager:
+  name: Equipment Manager
+  category: Maintenance
+  module: maintenance
+  ce_or_ee: community
+  purpose: 'Full control over the Maintenance app: equipment, maintenance requests, configuration.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+marketing_automation.group_marketing_automation_user:
+  name: User
+  category: Marketing Automation
+  module: marketing_automation
+  ce_or_ee: enterprise
+  purpose: Can create and manage marketing automation campaigns and workflows.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+marketing_card.marketing_card_group_manager:
+  name: Marketing Card Manager
+  category: Marketing Card
+  module: marketing_card
+  ce_or_ee: community
+  purpose: 'Full control over the Marketing Card app: templates, campaigns, and configuration.'
+  versions_seen:
+  - '18.0'
+  - '19.0'
+marketing_card.marketing_card_group_user:
+  name: Marketing Card User
+  category: Marketing Card
+  module: marketing_card
+  ce_or_ee: community
+  purpose: Can create and use marketing card campaigns.
+  versions_seen:
+  - '18.0'
+  - '19.0'
+mass_mailing.group_mass_mailing_campaign:
+  name: Manage Mass Mailing Campaigns
+  category: Technical
+  module: mass_mailing
+  ce_or_ee: community
+  purpose: Enables organizing mass mailings into marketing campaigns.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mass_mailing.group_mass_mailing_user:
+  name: User
+  category: Email Marketing
+  module: mass_mailing
+  ce_or_ee: community
+  purpose: Can create and send mass mailings.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mrp.group_locked_by_default:
+  name: Locked by default
+  category: Technical
+  module: mrp
+  ce_or_ee: community
+  purpose: Sets new manufacturing orders to be locked (no further edits) by default once marked done.
+  versions_seen:
+  - '14.0'
+mrp.group_mrp_byproducts:
+  name: Produce residual products
+  category: Technical
+  module: mrp
+  ce_or_ee: community
+  purpose: Enables producing secondary/residual (by-)products alongside the main product on a manufacturing
+    order.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mrp.group_mrp_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Manufacturing
+  module: mrp
+  ce_or_ee: community
+  purpose: 'Full control over the Manufacturing app: bills of materials, work centers, routings, all manufacturing
+    orders, reporting.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mrp.group_mrp_reception_report:
+  name: Use Reception Report with Manufacturing Orders
+  category: Technical
+  module: mrp
+  ce_or_ee: community
+  purpose: Enables the reception report for components tied to manufacturing orders.
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mrp.group_mrp_routings:
+  name: Manage Work Order Operations
+  category: Technical
+  module: mrp
+  ce_or_ee: community
+  purpose: Enables configuring detailed work order operations/routings on bills of materials.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mrp.group_mrp_user:
+  name: User
+  category: Manufacturing
+  module: mrp
+  ce_or_ee: community
+  purpose: Can create and process manufacturing orders and work orders assigned to them.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mrp.group_mrp_workorder_dependencies:
+  name: Use Operation Dependencies
+  category: Technical
+  module: mrp
+  ce_or_ee: community
+  purpose: Enables setting dependencies between work order operations, so one must finish before another
+    starts.
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mrp.group_unlocked_by_default:
+  name: Unlocked by default
+  category: Technical
+  module: mrp
+  ce_or_ee: community
+  purpose: Sets new manufacturing orders to remain unlocked/editable by default once marked done.
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mrp_plm.group_plm_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Product Lifecycle Management (PLM)
+  module: mrp_plm
+  ce_or_ee: enterprise
+  purpose: The PLM manager manages products lifecycle management
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mrp_plm.group_plm_user:
+  name: User
+  category: Product Lifecycle Management (PLM)
+  module: mrp_plm
+  ce_or_ee: enterprise
+  purpose: The PLM user uses products lifecycle management
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mrp_workorder.group_mrp_wo_shop_floor:
+  name: Manage your manufacturing orders from the shop floor display app
+  category: Technical
+  module: mrp_workorder
+  ce_or_ee: enterprise
+  purpose: Grants access to the Shop Floor tablet display for managing manufacturing/work orders on the
+    factory floor.
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+mrp_workorder.group_mrp_wo_tablet_timer:
+  name: Manage Work Order timer on Shop Floor
+  also_named:
+  - Manage Work Order timer on Tablet View
+  category: Technical
+  module: mrp_workorder
+  ce_or_ee: enterprise
+  purpose: Enables the work order timer on the Shop Floor tablet display.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+partner_commission.group_commission_manager:
+  name: All Documents
+  category: Commissions
+  module: partner_commission
+  ce_or_ee: enterprise
+  purpose: Can view and manage commission documents for all partners/resellers.
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+partner_commission.group_commission_user:
+  name: Own Documents Only
+  category: Commissions
+  module: partner_commission
+  ce_or_ee: enterprise
+  purpose: Can view only their own commission documents.
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+planning.group_planning_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Planning
+  module: planning
+  ce_or_ee: enterprise
+  purpose: 'Full control over the Planning app: all shifts, roles, employees, and configuration.'
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+planning.group_planning_show_percentage:
+  name: Show Allocated Percentage
+  category: Technical
+  module: planning
+  ce_or_ee: enterprise
+  purpose: Displays allocated time as a percentage instead of hours in the Planning Gantt view.
+  versions_seen:
+  - '13.0'
+planning.group_planning_user:
+  name: User
+  category: Planning
+  module: planning
+  ce_or_ee: enterprise
+  purpose: Can view and manage their own planned shifts.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+point_of_sale.group_pos_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Point of Sale
+  module: point_of_sale
+  ce_or_ee: community
+  purpose: 'Full control over the Point of Sale app: configuration, all sessions/orders, pricing, reporting.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+point_of_sale.group_pos_preset:
+  name: Preset Menu
+  module: point_of_sale
+  ce_or_ee: community
+  purpose: Enables preset order types (e.g. dine-in, takeaway, delivery) on the Point of Sale interface.
+  versions_seen:
+  - '19.0'
+point_of_sale.group_pos_user:
+  name: User
+  category: Point of Sale
+  module: point_of_sale
+  ce_or_ee: community
+  purpose: Can operate the point of sale (register sessions, sell products) at assigned point(s) of sale.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+pos_blackbox_be.group_minfin_personnel:
+  name: Read-only FDM
+  category: Extra Rights
+  module: pos_blackbox_be
+  ce_or_ee: enterprise
+  purpose: Grants Belgian tax authority (FDM/fiscal data module) read-only inspection access, as required
+    by Belgian fiscal blackbox regulation.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+product.group_discount_per_so_line:
+  name: Discount on lines
+  category: Technical
+  module: product
+  ce_or_ee: community
+  purpose: Allows applying per-line discounts on quotations/sales orders.
+  renamed_from:
+  - xml_id: sale.group_discount_per_so_line
+    version: '13.0'
+  renamed_to:
+  - xml_id: sale.group_discount_per_so_line
+    version: '18.0'
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+product.group_pricelist_item:
+  name: Manage Pricelist Items
+  category: Technical
+  module: product
+  ce_or_ee: community
+  purpose: Enables managing detailed pricelist items/rules on pricelists.
+  removed_in:
+  - '13.0'
+  versions_seen:
+  - '12.0'
+product.group_product_manager:
+  name: Create
+  also_named:
+  - Product Creation
+  category: Extra Rights
+  module: product
+  ce_or_ee: community
+  purpose: 'Full control over the product catalog: categories, templates, variants, vendor pricing, and
+    pricelists.'
+  versions_seen:
+  - '18.0'
+  - '19.0'
+product.group_product_pricelist:
+  name: Basic Pricelists
+  also_named:
+  - Pricelists On Product
+  category: Technical
+  module: product
+  ce_or_ee: community
+  purpose: Enables basic pricelist configuration on products.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+product.group_product_variant:
+  name: Manage Product Variants
+  category: Technical
+  module: product
+  ce_or_ee: community
+  purpose: Enables managing product variants (attributes/combinations) on products.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+product.group_sale_pricelist:
+  name: Advanced Pricelists
+  also_named:
+  - Sales Pricelists
+  category: Technical
+  module: product
+  ce_or_ee: community
+  purpose: Enables advanced pricelist rules and multiple pricelists for sales.
+  removed_in:
+  - '18.0'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+product.group_stock_packaging:
+  name: Manage Product Packaging
+  category: Technical
+  module: product
+  ce_or_ee: community
+  purpose: Enables configuring product packaging (boxes, pallets) for inventory and sales.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+product_expiry.group_expiry_date_on_delivery_slip:
+  name: Include expiration dates on delivery slip
+  category: Technical
+  module: product_expiry
+  ce_or_ee: community
+  purpose: Displays product expiration dates on delivery slips.
+  versions_seen:
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+project.group_project_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Project
+  module: project
+  ce_or_ee: community
+  purpose: 'Full control over the Project app: all projects, tasks, stages, configuration, reporting.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+project.group_project_milestone:
+  name: Use Milestones
+  category: Technical
+  module: project
+  ce_or_ee: community
+  purpose: Enables tracking milestones on projects.
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+project.group_project_rating:
+  name: Use Rating on Project
+  category: Technical
+  module: project
+  ce_or_ee: community
+  purpose: Enables customer satisfaction ratings on project tasks.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+project.group_project_recurring_tasks:
+  name: Use Recurring Tasks
+  category: Technical
+  module: project
+  ce_or_ee: community
+  purpose: Enables creating recurring tasks on projects.
+  versions_seen:
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+project.group_project_stages:
+  name: Use Stages on Project
+  category: Technical
+  module: project
+  ce_or_ee: community
+  purpose: Enables custom stages/kanban columns on projects.
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+project.group_project_task_dependencies:
+  name: Use Task Dependencies
+  category: Technical
+  module: project
+  ce_or_ee: community
+  purpose: Enables setting dependencies between project tasks.
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+project.group_project_user:
+  name: User
+  category: Project
+  module: project
+  ce_or_ee: community
+  purpose: Can create and manage tasks on projects they're a member of.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+project.group_subtask_project:
+  name: Use Subtasks
+  category: Technical
+  module: project
+  ce_or_ee: community
+  purpose: Enables creating subtasks under project tasks.
+  removed_in:
+  - '17.0'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+project_forecast.group_project_forecast_display_allocate_time:
+  name: Allocated time percentage Gantt
+  category: Technical
+  module: project_forecast
+  ce_or_ee: enterprise
+  purpose: Display Employee's allocated time percentage in the Gantt view
+  versions_seen:
+  - '14.0'
+project_todo.group_onboarding_todo:
+  name: Onboarding todo already generated for those users
+  category: Technical
+  module: project_todo
+  ce_or_ee: community
+  purpose: Technical marker group used to track which users already received onboarding to-do items, so
+    they aren't generated again.
+  versions_seen:
+  - '17.0'
+  - '18.0'
+purchase.group_manage_vendor_price:
+  name: Manage Vendor Price
+  category: Technical
+  module: purchase
+  ce_or_ee: community
+  purpose: Enables managing vendor-specific pricing on product vendor records.
+  removed_in:
+  - '13.0'
+  versions_seen:
+  - '12.0'
+purchase.group_purchase_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Purchase
+  module: purchase
+  ce_or_ee: community
+  purpose: 'Full control over the Purchase app: configuration, vendor pricelists, all purchase documents,
+    approvals, reporting.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+purchase.group_purchase_user:
+  name: User
+  category: Purchase
+  module: purchase
+  ce_or_ee: community
+  purpose: Can create and manage their own requests for quotation and purchase orders.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+purchase.group_send_reminder:
+  name: Send an automatic reminder email to confirm delivery
+  category: Technical
+  module: purchase
+  ce_or_ee: community
+  purpose: Enables sending an automatic reminder email to vendors to confirm delivery dates.
+  versions_seen:
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+purchase.group_warning_purchase:
+  name: A warning can be set on a product or a customer (Purchase)
+  category: Technical
+  module: purchase
+  ce_or_ee: community
+  purpose: Can configure a warning message that pops up when a specific product or vendor is used on a
+    purchase document.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+purchase_requisition.group_purchase_alternatives:
+  name: Manage Purchase Alternatives
+  category: Technical
+  module: purchase_requisition
+  ce_or_ee: community
+  purpose: Enables comparing alternative vendor quotations against each other on a purchase agreement.
+  versions_seen:
+  - '18.0'
+  - '19.0'
+quality.group_quality_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Quality
+  module: quality
+  ce_or_ee: enterprise
+  purpose: The quality manager manages the quality process
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+quality.group_quality_user:
+  name: User
+  category: Quality
+  module: quality
+  ce_or_ee: enterprise
+  purpose: The quality user uses the quality process
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+room.group_room_manager:
+  name: Manage Rooms
+  category: Room
+  module: room
+  ce_or_ee: enterprise
+  purpose: 'Full control over the Rooms app: meeting room configuration and bookings.'
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+sale.group_auto_done_setting:
+  name: Lock Confirmed Sales
+  category: Technical
+  module: sale
+  ce_or_ee: community
+  purpose: Automatically locks sales orders once fully invoiced/delivered, preventing further edits.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+sale.group_delivery_invoice_address:
+  name: Addresses in Sales Orders
+  category: Technical
+  module: sale
+  ce_or_ee: community
+  purpose: Exposes separate delivery/invoice address selection on sales orders (superseded by account.group_delivery_invoice_address
+    from Odoo 16.0).
+  renamed_to:
+  - xml_id: account.group_delivery_invoice_address
+    version: '16.0'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+sale.group_discount_per_so_line:
+  name: Discount on lines
+  category: Technical
+  module: sale
+  ce_or_ee: community
+  purpose: Allows applying per-line discounts on quotations/sales orders.
+  renamed_from:
+  - xml_id: product.group_discount_per_so_line
+    version: '18.0'
+  renamed_to:
+  - xml_id: product.group_discount_per_so_line
+    version: '13.0'
+  versions_seen:
+  - '12.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+sale.group_proforma_sales:
+  name: Pro-forma Invoices
+  category: Technical
+  module: sale
+  ce_or_ee: community
+  purpose: Allows printing/sending pro-forma invoices from a sales order before confirmation.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+sale.group_sale_order_dates:
+  name: Manage delivery dates from sales orders.
+  category: Technical
+  module: sale
+  ce_or_ee: community
+  purpose: 'This option introduces extra fields in the sales order to easily schedule product deliveries
+    on your own: expected date, commitment date, effective date.'
+  removed_in:
+  - '13.0'
+  versions_seen:
+  - '12.0'
+sale.group_warning_sale:
+  name: A warning can be set on a product or a customer (Sale)
+  category: Technical
+  module: sale
+  ce_or_ee: community
+  purpose: Can configure a warning message that pops up when a specific product or customer is used on
+    a sales document.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+sale_commission.group_commission_forecast:
+  name: Enable Commission Forecast
+  category: Technical
+  module: sale_commission
+  ce_or_ee: enterprise
+  purpose: Enables forecasting future sales commissions based on pipeline/target achievement.
+  versions_seen:
+  - '18.0'
+  - '19.0'
+sale_management.group_sale_order_template:
+  name: Quotation Templates
+  category: Technical
+  module: sale_management
+  ce_or_ee: community
+  purpose: Enables creating and using quotation templates to speed up sales order creation.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+sale_stock.group_display_incoterm:
+  name: Display incoterms on Sales Order and related invoices
+  category: Technical
+  module: sale_stock
+  ce_or_ee: community
+  purpose: Displays incoterms on sales orders and related invoices.
+  removed_in:
+  - '17.0'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+sale_stock.group_lot_on_invoice:
+  name: Display Serial & Lot Number on Invoices
+  category: Technical
+  module: sale_stock
+  ce_or_ee: community
+  purpose: Displays lot/serial numbers on customer invoices.
+  renamed_to:
+  - xml_id: stock_account.group_lot_on_invoice
+    version: '15.0'
+  versions_seen:
+  - '13.0'
+  - '14.0'
+sale_stock.group_route_so_lines:
+  name: Enable Route on Sales Order Line
+  category: Technical
+  module: sale_stock
+  ce_or_ee: community
+  purpose: Enables selecting a specific delivery route on individual sales order lines.
+  removed_in:
+  - '13.0'
+  versions_seen:
+  - '12.0'
+sale_stock_renting.group_rental_stock_picking:
+  name: Use pickings for rental orders
+  category: Technical
+  module: sale_stock_renting
+  ce_or_ee: enterprise
+  purpose: Enables generating stock pickings (delivery/return) for rental orders.
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+sale_subscription.group_sale_subscription_manager:
+  name: Administrator
+  also_named:
+  - Manage Subscriptions
+  category: Subscriptions
+  module: sale_subscription
+  ce_or_ee: enterprise
+  purpose: The user will have write access to Subscriptions.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+sale_subscription.group_sale_subscription_view:
+  name: See Subscriptions
+  category: Subscriptions
+  module: sale_subscription
+  ce_or_ee: enterprise
+  purpose: The user will have read access to subscriptions.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+sale_timesheet_enterprise.group_timesheet_leaderboard_show_rates:
+  name: Billing Rate/Total Time indicators
+  category: Technical
+  module: sale_timesheet_enterprise
+  ce_or_ee: enterprise
+  purpose: Displays billing rate and total billed time indicators on the timesheet leaderboard.
+  versions_seen:
+  - '17.0'
+sale_timesheet_enterprise.group_use_timesheet_leaderboard:
+  name: Leaderboard
+  category: Technical
+  module: sale_timesheet_enterprise
+  ce_or_ee: enterprise
+  purpose: Enables the gamified timesheet leaderboard comparing employees' logged/billable hours.
+  versions_seen:
+  - '17.0'
+sales_team.group_sale_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Sales
+  module: sales_team
+  ce_or_ee: community
+  purpose: 'Full control over the Sales app: configuration, pricelists, all sales teams and documents,
+    reporting.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+sales_team.group_sale_salesman:
+  name: 'User: Own Documents Only'
+  category: Sales
+  module: sales_team
+  ce_or_ee: community
+  purpose: Can create and manage their own quotations/sales orders and see only their own sales team's
+    documents.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+sales_team.group_sale_salesman_all_leads:
+  name: 'User: All Documents'
+  category: Sales
+  module: sales_team
+  ce_or_ee: community
+  purpose: Same as the salesman role but can see all quotations/orders across salespeople and teams, not
+    just their own.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+sign.group_sign_employee:
+  name: 'Employee: Send file to sign'
+  category: Sign
+  module: sign
+  ce_or_ee: enterprise
+  purpose: Allows an employee to send documents to be signed, without full Sign administrator rights.
+  versions_seen:
+  - '14.0'
+  - '15.0'
+sign.group_sign_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  - 'Administrator: All Templates'
+  category: Sign
+  module: sign
+  ce_or_ee: enterprise
+  purpose: Full administrative control over the Sign app, including audit/geolocation tracking data and
+    template tag management, beyond what regular Sign users can see.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+sign.group_sign_user:
+  name: 'User: Own Templates'
+  also_named:
+  - Officer
+  - 'User: Own and Shared Templates'
+  category: Sign
+  module: sign
+  ce_or_ee: enterprise
+  purpose: Can create and send signature requests using their own templates.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+sign.manage_template_access:
+  name: Manage template access
+  category: Technical
+  module: sign
+  ce_or_ee: enterprise
+  purpose: Can manage which users/groups have access to specific sign templates.
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+sign.show_sign_order:
+  name: Enable Signing Order
+  category: Technical
+  module: sign
+  ce_or_ee: enterprise
+  purpose: Enables enforcing a specific signing order among multiple signatories on a document.
+  versions_seen:
+  - '16.0'
+social.group_social_manager:
+  name: Social Manager
+  category: Social Marketing
+  module: social
+  ce_or_ee: enterprise
+  purpose: 'Full control over the Social Marketing app: all social accounts, posts, and configuration.'
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+social.group_social_user:
+  name: Social User
+  also_named:
+  - Social Poster
+  category: Social Marketing
+  module: social
+  ce_or_ee: enterprise
+  purpose: Can create and schedule social media posts.
+  versions_seen:
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+spreadsheet_dashboard.group_dashboard_manager:
+  name: Admin
+  category: Dashboard
+  module: spreadsheet_dashboard
+  ce_or_ee: community
+  purpose: Can create and edit spreadsheet dashboards shared with other users.
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock.group_adv_location:
+  name: Manage Push and Pull inventory flows
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Enables advanced routing rules (push/pull rules, multi-step routes) for stock moves.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock.group_auto_reception_report:
+  name: Display Reception Report at Validation
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Automatically opens the reception report when validating incoming shipments.
+  versions_seen:
+  - '15.0'
+stock.group_lot_on_delivery_slip:
+  name: Display Serial & Lot Number in Delivery Slips
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Displays lot/serial numbers on delivery slips.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock.group_production_lot:
+  name: Manage Lots / Serial Numbers
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Enables tracking of products by lot/serial number.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock.group_reception_report:
+  name: Use Reception Report
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Enables the reception report showing what to do with received goods (e.g. reserve for outgoing
+    deliveries).
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock.group_stock_lot_print_gs1:
+  name: Print GS1 Barcodes for Lot & Serial Numbers
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Enables printing GS1-standard barcodes for lots and serial numbers.
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock.group_stock_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Inventory
+  module: stock
+  ce_or_ee: community
+  purpose: 'Full control over the Inventory app: warehouse/routes configuration, all operations, adjustments,
+    reporting.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock.group_stock_multi_locations:
+  name: Manage Multiple Stock Locations
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Enables multiple/detailed storage locations within warehouses (instead of one flat stock location).
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock.group_stock_multi_warehouses:
+  name: Manage Multiple Warehouses
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Enables managing multiple warehouses instead of a single default warehouse.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock.group_stock_picking_wave:
+  name: Use wave pickings
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Enables grouping multiple deliveries into wave pickings for batch processing.
+  removed_in:
+  - '18.0'
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+stock.group_stock_sign_delivery:
+  name: Require a signature on your delivery orders
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Requires a customer signature when validating delivery orders.
+  versions_seen:
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock.group_stock_storage_categories:
+  name: Manage Storage Categories
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Enables storage categories to constrain what can be stored in specific warehouse locations.
+  removed_in:
+  - '18.0'
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+stock.group_stock_user:
+  name: User
+  category: Inventory
+  module: stock
+  ce_or_ee: community
+  purpose: Can process warehouse operations (transfers, deliveries, receipts) they're assigned to.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock.group_tracking_lot:
+  name: Manage Packages
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Enables packing products into packages and tracking those packages through operations.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock.group_tracking_owner:
+  name: Manage Different Stock Owners
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Enables tracking the owner of stock when it belongs to a different company/partner (consignment
+    stock).
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock.group_warning_stock:
+  name: A warning can be set on a partner (Stock)
+  category: Technical
+  module: stock
+  ce_or_ee: community
+  purpose: Can configure a warning message that pops up when a specific partner is used on a stock/inventory
+    document.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock_account.group_lot_on_invoice:
+  name: Display Serial & Lot Number on Invoices
+  category: Technical
+  module: stock_account
+  ce_or_ee: community
+  purpose: Displays lot/serial numbers on customer invoices generated from delivered stock.
+  renamed_from:
+  - xml_id: sale_stock.group_lot_on_invoice
+    version: '15.0'
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+stock_account.group_stock_accounting_automatic:
+  name: Stock Accounting Automatic
+  category: Technical
+  module: stock_account
+  ce_or_ee: community
+  purpose: Enables automatic (perpetual) inventory valuation accounting entries.
+  versions_seen:
+  - '17.0'
+  - '18.0'
+stock_barcode.group_barcode_count_entire_location:
+  name: Count Entire Locations
+  category: Technical
+  module: stock_barcode
+  ce_or_ee: enterprise
+  purpose: Enables counting an entire storage location at once during a Barcode app inventory count.
+  versions_seen:
+  - '18.0'
+stock_barcode.group_barcode_keyboard_shortcuts:
+  name: Keyboard Shortcuts
+  category: Technical
+  module: stock_barcode
+  ce_or_ee: enterprise
+  purpose: Enables keyboard shortcuts for faster operation in the Barcode app.
+  versions_seen:
+  - '14.0'
+stock_barcode.group_barcode_show_quantity_count:
+  name: Show Quantity to Count
+  category: Technical
+  module: stock_barcode
+  ce_or_ee: enterprise
+  purpose: Shows the running quantity counted so far while scanning in the Barcode app.
+  versions_seen:
+  - '18.0'
+survey.group_survey_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Surveys
+  module: survey
+  ce_or_ee: community
+  purpose: 'Full control over the Survey app: all surveys, questions, and configuration.'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+survey.group_survey_user:
+  name: User
+  category: Surveys
+  module: survey
+  ce_or_ee: community
+  purpose: Can create and manage their own surveys.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+uom.group_uom:
+  name: Manage Multiple Units of Measure
+  category: Technical
+  module: uom
+  ce_or_ee: community
+  purpose: Enables using multiple units of measure and unit conversions on products.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+voip.group_voip_admin:
+  name: Administrator
+  module: voip
+  ce_or_ee: enterprise
+  purpose: can view, report, and manage call settings.
+  versions_seen:
+  - '19.0'
+voip.group_voip_officer:
+  name: Officer
+  module: voip
+  ce_or_ee: enterprise
+  purpose: can view and report on all calls.
+  versions_seen:
+  - '19.0'
+website.group_multi_website:
+  name: Multi-website
+  category: Technical
+  module: website
+  ce_or_ee: community
+  purpose: Enables managing multiple websites from the same database.
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+website.group_website_designer:
+  name: Editor and Designer
+  category: Website
+  module: website
+  ce_or_ee: community
+  purpose: Can edit and restyle website pages using the website builder (theme/design tools).
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+website.group_website_publisher:
+  name: Restricted Editor
+  category: Website
+  module: website
+  ce_or_ee: community
+  purpose: Can edit content on website pages they're granted access to, without the full design/builder
+    tools (legacy xml_id, superseded by website.group_website_restricted_editor).
+  renamed_to:
+  - xml_id: website.group_website_restricted_editor
+    version: '16.0'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+  - '15.0'
+website.group_website_restricted_editor:
+  name: Restricted Editor
+  category: Website
+  module: website
+  ce_or_ee: community
+  purpose: Can edit content on website pages they're granted access to, without the full design/builder
+    tools of the Editor and Designer group.
+  renamed_from:
+  - xml_id: website.group_website_publisher
+    version: '16.0'
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+website.website_page_controller_expose:
+  name: Public access to arbitrary exposed model
+  category: Technical
+  module: website
+  ce_or_ee: community
+  purpose: Technical group used internally to expose specific model records as publicly viewable website
+    pages.
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'
+website_calendar.group_calendar_manager:
+  name: Administrator
+  also_named:
+  - Manager
+  category: Online Appointment
+  module: website_calendar
+  ce_or_ee: enterprise
+  purpose: 'Full control over online appointment scheduling: appointment types, availability, and staff
+    calendars (legacy module name, later renamed to `appointment`).'
+  versions_seen:
+  - '12.0'
+  - '13.0'
+  - '14.0'
+website_helpdesk_livechat.group_use_website_helpdesk_livechat:
+  name: Use Live Chat
+  category: Technical
+  module: website_helpdesk_livechat
+  ce_or_ee: enterprise
+  purpose: Enables live chat support directly from helpdesk tickets on the website.
+  versions_seen:
+  - '18.0'
+  - '19.0'
+website_mass_mailing.group_website_popup_on_exit:
+  name: Use subscription pop up on the website
+  category: Technical
+  module: website_mass_mailing
+  ce_or_ee: community
+  purpose: Enables an exit-intent popup on the website to capture mailing list subscriptions.
+  versions_seen:
+  - '12.0'
+website_sale.group_product_feed:
+  name: Product Feed
+  module: website_sale
+  ce_or_ee: community
+  purpose: Enables generating a product feed (e.g. for Google Shopping/Meta) from the eCommerce catalog.
+  versions_seen:
+  - '19.0'
+website_sale.group_product_price_comparison:
+  name: Comparison Price
+  category: Technical
+  module: website_sale
+  ce_or_ee: community
+  purpose: Displays a comparison/strikethrough price alongside the selling price on the eCommerce website.
+  versions_seen:
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+website_sale.group_show_uom_price:
+  name: UOM Price Display for eCommerce
+  category: Technical
+  module: website_sale
+  ce_or_ee: community
+  purpose: Displays the price per unit of measure (e.g. price/kg) on the eCommerce website.
+  versions_seen:
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+website_slides.group_website_slides_manager:
+  name: Manager
+  category: eLearning
+  module: website_slides
+  ce_or_ee: community
+  purpose: 'Full control over the eLearning app: all courses, content, and configuration.'
+  versions_seen:
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+website_slides.group_website_slides_officer:
+  name: Officer
+  category: eLearning
+  module: website_slides
+  ce_or_ee: community
+  purpose: Can create and manage their own eLearning courses.
+  versions_seen:
+  - '14.0'
+  - '15.0'
+  - '16.0'
+  - '17.0'
+  - '18.0'
+  - '19.0'
+whatsapp.group_whatsapp_admin:
+  name: Administrator
+  category: WhatsApp
+  module: whatsapp
+  ce_or_ee: enterprise
+  purpose: 'Full control over WhatsApp Business integration: templates, message configuration, and connected
+    accounts.'
+  versions_seen:
+  - '17.0'
+  - '18.0'
+  - '19.0'

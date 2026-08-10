@@ -1,11 +1,12 @@
 {
     "name": "odoo",
-    "description": "Odoo data inspection, querying, and access-rights comparison toolkit using odooly CLI",
-    "version": "0.2.0",
+    "description": "Odoo data inspection, querying, access-rights comparison, and Access Rights groups cataloging toolkit using odooly CLI",
+    "version": "0.3.0",
     "author": {
         "name": "Trobz"
     },
     "skills": [
-        "./skills/odooly"
+        "./skills/odooly",
+        "./skills/access-rights-groups"
     ]
 }
