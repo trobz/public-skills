@@ -32,11 +32,13 @@ from manifestoo_core.core_addons import is_core_ce_addon, is_core_ee_addon
 from manifestoo_core.odoo_series import OdooSeries
 
 
-# Separator used to join a user's group names into a single CSV field
-# (fetch_user_groups). Group full_name can itself contain a comma (e.g.
-# "View Member SmartButton (Account Analytic, Archive)"), so joining/splitting
-# on ", " is ambiguous. " | " is far less likely to collide and is what
-# generate_html_report.py expects when it splits this field back into a list.
+# Separator used to join a user's group entries into a single CSV field
+# (fetch_user_groups). Each entry is "[xml_id] Display Name" (or bare
+# "Display Name" when no xml_id resolves) - full_name alone can contain a
+# comma (e.g. "View Member SmartButton (Account Analytic, Archive)"), so
+# joining/splitting on ", " is ambiguous. " | " is far less likely to
+# collide and is what generate_html_report.py expects when it splits this
+# field back into a list.
 GROUP_LIST_SEP = " | "
 
 
@@ -173,10 +175,24 @@ def fetch_user_groups(client, model_filter=None, include_archived_users=False, *
     for r in raw:
         group_ids.update(r["groups_id"].ids)
     group_name = batch_read(client, "res.groups", group_ids, "full_name")
+    group_xmlid = build_xmlid_map(client, "res.groups", group_ids)
 
     items = []
     for r in raw:
-        groups = sorted(group_name.get(gid, str(gid)) for gid in r["groups_id"].ids)
+        # Each entry is "[xml_id] Display Name" when the group has a
+        # resolvable xml_id, or bare "Display Name" otherwise (rare - a
+        # group with no ir.model.data entry). The xml_id is what
+        # generate_html_report.py's --known-list matching should key off -
+        # display text (full_name) is not a stable identifier (it can be
+        # customized per project, translated, or coincide between two
+        # entirely unrelated groups), only useful for a human reading the
+        # CSV directly. Sorted by display name (not xml_id) so a human
+        # scanning the CSV still sees a sensible, human order.
+        entries = sorted(
+            (group_name.get(gid, str(gid)), next(iter(group_xmlid.get(gid, ())), None))
+            for gid in r["groups_id"].ids
+        )
+        groups = [f"[{xmlid}] {name}" if xmlid else name for name, xmlid in entries]
         fields = {"groups": GROUP_LIST_SEP.join(groups)}
         items.append({
             "res_id": None,

@@ -275,6 +275,8 @@ The script compares 5 kinds of access-rights data between two environments:
 
 Records are matched between the two environments by **XML ID** first (falling back to a natural key — e.g. group `full_name`, user `login` — when no XML ID exists on either side), never by raw database `id`, since the two environments are normally independent databases where numeric ids don't correspond to the same record.
 
+The `users` type's `groups` field lists each group as `[xml_id] Display Name` (bare `Display Name` when no xml_id resolves) rather than just the display text - `generate_html_report.py`'s `--known-list` matching relies on this to look up a purpose by the group's real, stable xml_id instead of by display text alone (see its docs below for why that matters).
+
 ### Usage
 
 ```bash
@@ -333,6 +335,16 @@ The report shows, per user with a changed group membership, two boxes:
 
 Users that exist in only one of the two environments (`missing_in_a`/`missing_in_b` on the `users` `(record)` rows — e.g. an account created or archived between the two envs) are **not** shown as a fake "N → 0 groups" change; they're listed separately in a collapsed "excluded" note, since that's an account-lifecycle fact, not a role/group diff.
 
+**Pass `--known-list` (repeatable) whenever the diff spans different Odoo versions, or when the project has its own custom/OCA groups** — e.g. comparing a v12 instance against its v18 migration target, which is exactly the case that makes a plain add/remove diff misleading. Pass the sibling `access-rights-groups` skill's `known_groups.yaml` (native groups) and, if the project has one, a project-local custom-groups purpose file (e.g. Foodcoop's `data/access-rights-groups.yaml`, drafted via `access-rights-groups`' `draft_project_group_purposes.py`) - both at once, `--known-list a.yaml --known-list b.yaml`. With it, the report:
+
+- Adds a purpose tooltip to every group shown, sourced from whichever file(s) documented it.
+- Folds a group Odoo itself renamed across versions (sourced from `resolve_renames.py`'s OpenUpgrade data) into a single "Renamed by Odoo, not an access change" entry, instead of showing it as one group lost + one unrelated group gained.
+- Flags a removed group that Odoo itself dropped at a given version (sourced from `detect_removed_groups.py`'s `removed_in`) with a small badge, so it doesn't read as an unexplained access change.
+
+Matching prefers each group's **xml_id** when the CSV has one - `compare_access_rights.py` embeds it as `[xml_id] Display Name` per group entry (falls back to bare `Display Name` for a group with no resolvable xml_id, or when reading an older CSV from before this). xml_id is a real, stable identifier - unlike display text, which can be translated, customized per project, or coincide between two completely unrelated groups (a native group's historical display name and a project's own custom group happening to share the same bare name - a real case: Superquinquin's own `Accountant` role group collided with `account.group_account_manager`'s old display text). Only when no xml_id is available does it fall back to (category, name) text matching: each file's `name`/`category` fields are normalized the same way regardless of which convention produced them (split, like `known_groups.yaml`, or combined "Category / Name", like some older project-local files) - see `bare_name()` - and `category` is matched case/whitespace-insensitively (see `normalize_category()`). On a group documented in more than one file, the first `--known-list` that has it wins - pass the native catalog first, project-local files after.
+
+Without `--known-list` the report renders exactly as before - this is additive, never required.
+
 ### Usage
 
 ```bash
@@ -343,6 +355,18 @@ python scripts/compare_access_rights.py -c ~/odooly.ini --env-a ENV_A --env-b EN
 # 2. Render it as HTML
 python scripts/generate_html_report.py --input /tmp/diff.csv --output /tmp/report.html \
   --env-a ENV_A --env-b ENV_B --title "Coop Name - Role Migration Diff"
+
+# 2b. Same, but annotated with purposes/renames/removals from the shared known-group catalog
+# (use when ENV_A and ENV_B are different Odoo versions)
+python scripts/generate_html_report.py --input /tmp/diff.csv --output /tmp/report.html \
+  --env-a ENV_A --env-b ENV_B --title "Coop Name - v12 to v18 Diff" \
+  --known-list ../../access-rights-groups/scripts/known_groups.yaml
+
+# 2c. Also annotate the project's own custom/OCA groups (repeat --known-list)
+python scripts/generate_html_report.py --input /tmp/diff.csv --output /tmp/report.html \
+  --env-a ENV_A --env-b ENV_B --title "Coop Name - v12 to v18 Diff" \
+  --known-list ../../access-rights-groups/scripts/known_groups.yaml \
+  --known-list /path/to/project/data/access-rights-groups.yaml
 ```
 
 ### Options
@@ -354,11 +378,12 @@ python scripts/generate_html_report.py --input /tmp/diff.csv --output /tmp/repor
 | `--title` | Report title | `Access Rights Diff` |
 | `--env-a` / `--env-b` | Labels for the two environments shown in the meta line | `env A (before)` / `env B (after)` |
 | `--group-sep` | Separator used to split the `users`/`groups` CSV field back into a list | `" \| "` (must match `GROUP_LIST_SEP` in `compare_access_rights.py`) |
+| `--known-list` | Access-rights-groups-style YAML to annotate with - **repeatable**, merges purpose tooltips, renames, and removed-group badges from every file passed | off (report renders unannotated) |
 
 ### Workflow
 
 1. Run `compare_access_rights.py` with `--format csv --output <file>` to get the raw diff (all 5 types, so both `users`/`groups` and `roles` rows are present — narrowing `--types` to exclude `users` or `roles` will leave one of the two report boxes empty).
-2. Run `generate_html_report.py` on that CSV with `--env-a`/`--env-b`/`--title` set to something meaningful for the coop/instance pair being compared.
+2. Run `generate_html_report.py` on that CSV with `--env-a`/`--env-b`/`--title` set to something meaningful for the coop/instance pair being compared. Add `--known-list` (repeatable) when the two environments are on different Odoo versions or the project has its own documented custom groups.
 3. Open the resulting HTML file (or hand it to the user) — it's self-contained (inline CSS, no external assets) and adapts to light/dark mode.
 4. If the terminal output mentions excluded users (present in only one environment), mention this to the user — it usually means an account was created or archived between the two environments, not a role change; those users can be reviewed/deactivated manually if needed.
 
