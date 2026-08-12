@@ -2,11 +2,14 @@
 """
 Generate a per-user HTML report from a compare_access_rights.py CSV export.
 
-For each user with a changed group membership, the report shows two boxes:
+For each user with a changed group membership, the report shows:
   1. Roles assigned  - OCA `base_user_role` roles enabled for that user in
      env B (the "after" side), taken from the CSV's `roles` rows.
   2. Consequence on groups (diff) - the added/removed `res.groups` computed
      from the CSV's `users` / `groups` rows.
+  3. Groups unchanged - every group present on both sides, untouched by the
+     diff, collapsed by default (own nested <details>) so the full access
+     picture is there for validation without burying the actual change.
 
 Users that only exist in one of the two environments (missing_in_a /
 missing_in_b on the `users` `(record)` rows) are not real group diffs - they
@@ -464,6 +467,22 @@ ul.grouplist li {
 }
 li.g-added { background: var(--added-bg); color: var(--added); }
 li.g-removed { background: var(--removed-bg); color: var(--removed); }
+.unchanged-panel {
+  margin-top: 0.7rem; padding: 0.5rem 0.7rem;
+  background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+}
+.unchanged-panel summary {
+  cursor: pointer; padding: 0.1rem 0; font-size: 0.78rem; text-transform: uppercase;
+  letter-spacing: 0.03em; color: var(--muted); list-style: none;
+}
+.unchanged-panel summary::-webkit-details-marker { display: none; }
+.unchanged-panel summary::before { content: "\\25b8"; font-size: 0.7rem; margin-right: 0.3rem; }
+.unchanged-panel[open] summary::before { content: "\\25be"; }
+ul.unchangedlist { list-style: none; margin: 0.5rem 0 0; padding: 0; }
+ul.unchangedlist li {
+  font-size: 0.85rem; padding: 0.2rem 0.5rem; border-radius: 5px; margin-bottom: 2px;
+  color: var(--muted); overflow-wrap: anywhere; word-break: break-word;
+}
 .empty { color: var(--muted); font-size: 0.85rem; font-style: italic; }
 .excluded { margin-top: 1.5rem; color: var(--muted); font-size: 0.85rem; }
 .excluded summary { cursor: pointer; padding: 0.3rem 0; }
@@ -496,6 +515,24 @@ def render_group_col(title, items, css_class, purposes, removed_versions=None):
             explain_html = f' <span class="explain-badge">removed by Odoo @ {html.escape(", ".join(explained_versions))}</span>'
         lis.append(f'<li class="{css_class}{extra_class}"{title_attr}>{html.escape(display)}{explain_html}</li>')
     return f'<div class="col"><h4>{html.escape(title)} ({len(items)})</h4><ul class="grouplist">{"".join(lis)}</ul></div>'
+
+
+def render_unchanged_panel(unchanged, purposes):
+    """Groups present on both sides, untouched by the diff - collapsed by
+    default (own nested <details>) since this list is normally much longer
+    than Added/Removed and is context for validation, not the change itself."""
+    if not unchanged:
+        return ""
+    lis = []
+    for raw in unchanged:
+        xmlid, display = parse_group_entry(raw)
+        purpose = purposes.get(xmlid, display)
+        title_attr = f' title="{html.escape(purpose)}"' if purpose else ""
+        lis.append(f"<li{title_attr}>{html.escape(display)}</li>")
+    return (
+        f'<details class="unchanged-panel"><summary>Groups unchanged ({len(unchanged)})</summary>'
+        f'<ul class="unchangedlist">{"".join(lis)}</ul></details>'
+    )
 
 
 def render_renamed_panel(renamed, purposes):
@@ -579,6 +616,7 @@ def render_user_block(login, before, after, roles, purposes=None, renamed_pairs=
     # with) entries without one, instead of one sensible alphabetical list.
     added = sorted(added, key=lambda raw: parse_group_entry(raw)[1])
     removed = sorted(removed, key=lambda raw: parse_group_entry(raw)[1])
+    unchanged = sorted(before & after, key=lambda raw: parse_group_entry(raw)[1])
 
     critical = bool(before) and not after
     css_classes = "user critical" if critical else "user"
@@ -587,6 +625,7 @@ def render_user_block(login, before, after, roles, purposes=None, renamed_pairs=
     renamed_panel = render_renamed_panel(renamed, purposes)
     added_col = render_group_col("Added", added, "g-added", purposes)
     removed_col = render_group_col("Removed", removed, "g-removed", purposes, removed_versions)
+    unchanged_panel = render_unchanged_panel(unchanged, purposes)
 
     return f"""    <details class="{css_classes}">
       <summary>
@@ -604,6 +643,7 @@ def render_user_block(login, before, after, roles, purposes=None, renamed_pairs=
             {removed_col}
           </div>
         </div>
+        {unchanged_panel}
       </div>
     </details>
 """
