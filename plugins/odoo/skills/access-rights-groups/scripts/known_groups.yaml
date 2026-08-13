@@ -4,6 +4,8 @@ account.group_account_basic:
   - Basic
   - Invoicing & Banks
   category: Invoicing
+  also_category:
+  - Technical Settings
   module: account
   ce_or_ee: community
   purpose: Day-to-day banking access covering bank statement reconciliation, batch payments, and online
@@ -16,6 +18,8 @@ account.group_account_invoice:
   also_named:
   - Billing
   category: Invoicing
+  also_category:
+  - Accounting & Finance
   module: account
   ce_or_ee: community
   purpose: Can create and manage customer invoices/vendor bills without full accounting configuration
@@ -38,6 +42,8 @@ account.group_account_manager:
   - Accountant
   - Advisor
   category: Invoicing
+  also_category:
+  - Accounting & Finance
   module: account
   ce_or_ee: community
   purpose: 'Full control over the Accounting/Invoicing app: chart of accounts, fiscal configuration, taxes,
@@ -58,6 +64,8 @@ account.group_account_readonly:
   - Read-only
   - Auditor
   category: Invoicing
+  also_category:
+  - Accounting & Finance
   module: account
   ce_or_ee: community
   purpose: Read-only visibility into the full Accounting app (journals, reports) without edit rights.
@@ -85,6 +93,8 @@ account.group_account_user:
   - Bookkeeper
   - Accountant
   category: Invoicing
+  also_category:
+  - Accounting & Finance
   module: account
   ce_or_ee: community
   purpose: 'Day-to-day bookkeeping access: journal entries, reconciliation, invoices/bills, without full
@@ -148,6 +158,8 @@ account.group_partial_purchase_deductibility:
 account.group_products_in_bills:
   name: Use products on vendor bills
   category: Technical
+  also_category:
+  - Technical Settings
   module: account
   ce_or_ee: community
   purpose: Enables selecting products (not just accounts) on vendor bill lines.
@@ -182,6 +194,8 @@ account.group_sale_receipts:
 account.group_show_line_subtotals_tax_excluded:
   name: Tax display B2B
   category: Technical
+  also_category:
+  - Technical Settings
   module: account
   ce_or_ee: community
   purpose: Show line subtotals without taxes (B2B)
@@ -210,6 +224,8 @@ account.group_show_line_subtotals_tax_included:
 account.group_validate_bank_account:
   name: Validate bank account
   category: Accounting
+  also_category:
+  - Bank
   module: account
   ce_or_ee: community
   purpose: Can validate/verify a partner's bank account details before it is used for payments.
@@ -261,6 +277,8 @@ account_consolidation.group_consolidation_user:
 analytic.group_analytic_accounting:
   name: Analytic Accounting
   category: Technical
+  also_category:
+  - Technical Settings
   module: analytic
   ce_or_ee: community
   purpose: Enables analytic accounting (cost/profit centers, analytic plans and distributions) across
@@ -277,6 +295,8 @@ analytic.group_analytic_accounting:
 analytic.group_analytic_tags:
   name: Analytic Accounting Tags
   category: Technical
+  also_category:
+  - Technical Settings
   module: analytic
   ce_or_ee: community
   purpose: Enables tagging documents with analytic tags for cross-cutting cost analysis.
@@ -367,6 +387,8 @@ base.group_allow_export:
   also_named:
   - Access to export feature
   category: Technical
+  also_category:
+  - Technical Settings
   module: base
   ce_or_ee: community
   purpose: Allows exporting data (list views, reports) to file formats like CSV/XLSX.
@@ -1395,6 +1417,8 @@ im_livechat.im_livechat_group_manager:
   also_named:
   - Manager
   category: Live Chat
+  also_category:
+  - Live Support
   module: im_livechat
   ce_or_ee: community
   purpose: The user will be able to delete support channels.
@@ -1410,6 +1434,8 @@ im_livechat.im_livechat_group_manager:
 im_livechat.im_livechat_group_user:
   name: User
   category: Live Chat
+  also_category:
+  - Live Support
   module: im_livechat
   ce_or_ee: community
   purpose: The user will be able to join support channels.
@@ -1574,6 +1600,8 @@ mail.group_mail_notification_type_inbox:
 mail.group_mail_template_editor:
   name: Mail Template Editor
   category: Technical
+  also_category:
+  - Technical Settings
   module: mail
   ce_or_ee: community
   purpose: Can create and edit email templates used across the database.
@@ -1598,6 +1626,8 @@ mail_group.group_mail_group_manager:
 maintenance.group_equipment_manager:
   name: Equipment Manager
   category: Maintenance
+  also_category:
+  - Employees
   module: maintenance
   ce_or_ee: community
   purpose: 'Full control over the Maintenance app: equipment, maintenance requests, configuration.'
@@ -1646,6 +1676,8 @@ marketing_card.marketing_card_group_user:
 mass_mailing.group_mass_mailing_campaign:
   name: Manage Mass Mailing Campaigns
   category: Technical
+  also_category:
+  - Technical Settings
   module: mass_mailing
   ce_or_ee: community
   purpose: Enables organizing mass mailings into marketing campaigns.
@@ -1905,6 +1937,8 @@ point_of_sale.group_pos_manager:
   also_named:
   - Manager
   category: Point of Sale
+  also_category:
+  - Point Of Sale
   module: point_of_sale
   ce_or_ee: community
   purpose: 'Full control over the Point of Sale app: configuration, all sessions/orders, pricing, reporting.'
@@ -1927,6 +1961,8 @@ point_of_sale.group_pos_preset:
 point_of_sale.group_pos_user:
   name: User
   category: Point of Sale
+  also_category:
+  - Point Of Sale
   module: point_of_sale
   ce_or_ee: community
   purpose: Can operate the point of sale (register sessions, sell products) at assigned point(s) of sale.
@@ -1995,6 +2031,8 @@ product.group_product_pricelist:
   also_named:
   - Pricelists On Product
   category: Technical
+  also_category:
+  - Technical Settings
   module: product
   ce_or_ee: community
   purpose: Enables basic pricelist configuration on products.
@@ -2042,6 +2080,8 @@ product.group_sale_pricelist:
 product.group_stock_packaging:
   name: Manage Product Packaging
   category: Technical
+  also_category:
+  - Technical Settings
   module: product
   ce_or_ee: community
   purpose: Enables configuring product packaging (boxes, pallets) for inventory and sales.
@@ -2163,6 +2203,8 @@ project.group_project_user:
 project.group_subtask_project:
   name: Use Subtasks
   category: Technical
+  also_category:
+  - Technical Settings
   module: project
   ce_or_ee: community
   purpose: Enables creating subtasks under project tasks.
@@ -2195,6 +2237,8 @@ project_todo.group_onboarding_todo:
 purchase.group_manage_vendor_price:
   name: Manage Vendor Price
   category: Technical
+  also_category:
+  - Technical Settings
   module: purchase
   ce_or_ee: community
   purpose: Enables managing vendor-specific pricing on product vendor records.
@@ -2207,6 +2251,8 @@ purchase.group_purchase_manager:
   also_named:
   - Manager
   category: Purchase
+  also_category:
+  - Purchases
   module: purchase
   ce_or_ee: community
   purpose: 'Full control over the Purchase app: configuration, vendor pricelists, all purchase documents,
@@ -2223,6 +2269,8 @@ purchase.group_purchase_manager:
 purchase.group_purchase_user:
   name: User
   category: Purchase
+  also_category:
+  - Purchases
   module: purchase
   ce_or_ee: community
   purpose: Can create and manage their own requests for quotation and purchase orders.
@@ -2238,6 +2286,8 @@ purchase.group_purchase_user:
 purchase.group_send_reminder:
   name: Send an automatic reminder email to confirm delivery
   category: Technical
+  also_category:
+  - Technical Settings
   module: purchase
   ce_or_ee: community
   purpose: Enables sending an automatic reminder email to vendors to confirm delivery dates.
@@ -2672,6 +2722,8 @@ spreadsheet_dashboard.group_dashboard_manager:
 stock.group_adv_location:
   name: Manage Push and Pull inventory flows
   category: Technical
+  also_category:
+  - Technical Settings
   module: stock
   ce_or_ee: community
   purpose: Enables advanced routing rules (push/pull rules, multi-step routes) for stock moves.
@@ -2710,6 +2762,8 @@ stock.group_lot_on_delivery_slip:
 stock.group_production_lot:
   name: Manage Lots / Serial Numbers
   category: Technical
+  also_category:
+  - Technical Settings
   module: stock
   ce_or_ee: community
   purpose: Enables tracking of products by lot/serial number.
@@ -2767,6 +2821,8 @@ stock.group_stock_manager:
 stock.group_stock_multi_locations:
   name: Manage Multiple Stock Locations
   category: Technical
+  also_category:
+  - Technical Settings
   module: stock
   ce_or_ee: community
   purpose: Enables multiple/detailed storage locations within warehouses (instead of one flat stock location).
@@ -2782,6 +2838,8 @@ stock.group_stock_multi_locations:
 stock.group_stock_multi_warehouses:
   name: Manage Multiple Warehouses
   category: Technical
+  also_category:
+  - Technical Settings
   module: stock
   ce_or_ee: community
   purpose: Enables managing multiple warehouses instead of a single default warehouse.
@@ -2849,6 +2907,8 @@ stock.group_stock_user:
 stock.group_tracking_lot:
   name: Manage Packages
   category: Technical
+  also_category:
+  - Technical Settings
   module: stock
   ce_or_ee: community
   purpose: Enables packing products into packages and tracking those packages through operations.
@@ -2976,6 +3036,8 @@ survey.group_survey_user:
 uom.group_uom:
   name: Manage Multiple Units of Measure
   category: Technical
+  also_category:
+  - Technical Settings
   module: uom
   ce_or_ee: community
   purpose: Enables using multiple units of measure and unit conversions on products.

@@ -23,6 +23,7 @@ module, so this skill builds and maintains one.
 | `scripts/discover_groups.py` | Queries `res.groups` on **one live instance** via `odooly` - the ground-truth pass for what a specific project actually has installed. |
 | `scripts/resolve_renames.py` | Links known-list entries that are actually the same group renamed across versions, sourced from OCA OpenUpgrade's migration data (never guessed from name similarity). |
 | `scripts/detect_removed_groups.py` | Marks known-list entries confirmed removed (not renamed) by a real Odoo upgrade log, from any project. |
+| `scripts/record_display_variants.py` | Records alternate name/category text a known xml_id was seen with in a real live diff (`compare_access_rights.py` CSV) - e.g. one database's own casing drift on a category name, not visible from source. |
 | `scripts/write_project_group_purposes.py` | Writes purpose text for a project's own custom/OCA groups from `discover_groups.py --evidence` output - mechanically summarized facts only, never overwrites a purpose already set. |
 | `scripts/generate_roles_doc.py` | Renders the known list (or a live project's groups) into CSV / Markdown / Excel. |
 
@@ -300,6 +301,54 @@ python scripts/detect_removed_groups.py \
   under the wrong version is exactly the kind of mistake this check exists to catch.
   Pass `--force` to proceed anyway once you've confirmed by hand which version is
   actually right.
+
+## `scripts/record_display_variants.py` - record display-text drift found in a live diff
+
+A group's `category`/`name` text can differ between two live databases (or two versions
+of the same one) without the group itself ever being renamed - e.g. one database's own
+`ir.module.category` row says "Point Of Sale" while another (or Odoo's current source)
+says "Point of Sale" for the exact same `xml_id`. This isn't a version-driven change
+`extract_native_groups.py` could ever catch by scanning source (both sides can say the
+same thing in source while a live database's stored text has quietly drifted from it) -
+it's only observable empirically, by actually diffing two live environments and noticing
+the same `xml_id` disagrees with itself. Odooly's `generate_html_report.py` already folds
+this into a single "Same group, not an access change" entry at render time using nothing
+but the CSV's own embedded xml_ids (no `--known-list` needed for that) - this script is
+the separate step that **remembers** the variant for next time, by reading the same CSV
+and recording it into the known list.
+
+### Usage
+
+```bash
+python scripts/record_display_variants.py \
+    --csv /tmp/diff.csv --known-list scripts/known_groups.yaml [--dry-run]
+```
+
+### Options
+
+| Flag | Purpose | Default |
+|------|---------|---------|
+| `--csv` | CSV produced by `compare_access_rights.py --format csv` (required) | - |
+| `--known-list` | `known_groups.yaml` to annotate (required) | - |
+| `--dry-run` | Print what would be recorded without writing | off |
+
+### How it works
+
+- Reads every `[xml_id] Category / Name` group entry in the CSV's `users`-type `groups`
+  fields (both the "before" and "after" side, so a variant present on only one side of
+  the diff is still caught).
+- Only annotates `xml_id`s **already present** in `known_groups.yaml` - same principle as
+  `resolve_renames.py`/`detect_removed_groups.py`: never invents a new group entry from a
+  live diff alone.
+- A different `name` seen for a known `xml_id` is appended to `also_named` (the same
+  field `extract_native_groups.py` uses for name drift found in source - same concept,
+  different source of evidence). A different `category` is appended to `also_category`
+  (this script's own field - `extract_native_groups.py` has no equivalent, since this
+  kind of drift isn't visible from source at all).
+- Idempotent: re-running against the same CSV records nothing new the second time.
+- `generate_html_report.py` (sibling `odooly` skill) reads `also_category` the same way
+  it already reads `also_named` - once recorded, a future report matches against every
+  known variant, not just whatever the current live diff happens to rediscover.
 
 ## `scripts/write_project_group_purposes.py` - write purposes for a project's custom groups
 
