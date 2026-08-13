@@ -226,6 +226,19 @@ def load_known_index(known_list_paths):
                     purposes_by_name.setdefault(old_key, purpose)
                 if entry.get("removed_in"):
                     removed_by_name.setdefault(old_key, entry["removed_in"])
+            # Same idea as also_named, but for a category text variant seen
+            # live (record_display_variants.py) rather than a name variant
+            # found in source - e.g. one database's ir.module.category row
+            # says "Point Of Sale" while another (or Odoo's own current
+            # source) says "Point of Sale" for the same xml_id. Not a
+            # version-driven change extract_native_groups.py could ever
+            # catch by scanning source, only observable empirically.
+            for old_category in entry.get("also_category") or []:
+                old_key = (normalize_category(old_category), key[1])
+                if purpose and not purpose.startswith(TODO_PURPOSE):
+                    purposes_by_name.setdefault(old_key, purpose)
+                if entry.get("removed_in"):
+                    removed_by_name.setdefault(old_key, entry["removed_in"])
 
         for xml_id, entry in known.items():
             targets = entry.get("renamed_to") or []
@@ -539,8 +552,16 @@ def render_renamed_panel(renamed, purposes):
     """renamed: [(old_raw, new_raw, version), ...] - each side still the raw
     CSV entry ("[xml_id] Display Name" or bare "Display Name"), parsed here
     for both display text and purpose lookup. Shown as its own panel,
-    separate from added/removed - a rename didn't add or remove any actual
-    capability, so folding it into either count would misstate the diff."""
+    separate from added/removed - neither case added or removed any actual
+    capability, so folding either into added/removed would misstate the
+    diff.
+
+    version is None for a same-xml_id match with no tracked rename record
+    (find_renames() case 1 - the two sides being compared just show
+    different display text for the identical group, e.g. an
+    ir.module.category name that only differs in casing between two
+    instances/versions) - shown without a version badge, since there's
+    nothing to tag. A real Odoo-sourced rename (case 2) still gets one."""
     if not renamed:
         return ""
     items = []
@@ -549,26 +570,38 @@ def render_renamed_panel(renamed, purposes):
         new_xmlid, new_display = parse_group_entry(new_raw)
         purpose = purposes.get(new_xmlid, new_display)
         title_attr = f' title="{html.escape(purpose)}"' if purpose else ""
+        version_badge = f' <span class="rename-version">(Odoo {html.escape(version)})</span>' if version else ""
         items.append(
             f'<li{title_attr}><span class="g-removed-inline">{html.escape(old_display)}</span>'
             f" &rarr; <span class=\"g-added-inline\">{html.escape(new_display)}</span>"
-            f' <span class="rename-version">(Odoo {html.escape(version)})</span></li>'
+            f'{version_badge}</li>'
         )
     return (
-        '<div class="renamed-panel"><h4>Renamed by Odoo, not an access change '
+        '<div class="renamed-panel"><h4>Same group, not an access change '
         f'({len(renamed)})</h4><ul class="renamelist">{"".join(items)}</ul></div>'
     )
 
 
 def find_renames(removed, added, renamed_pairs, renamed_by_xmlid):
     """Split (removed, added) raw-entry sets into (removed, added, renamed) -
-    pulling out pairs where a 'removed' group is known to have been renamed
-    (by a real Odoo upgrade, per resolve_renames.py) into an 'added' one, so
-    the diff doesn't misreport a rename as one access lost + one gained.
+    pulling out pairs where a 'removed' group is the same group as an
+    'added' one, so the diff doesn't misreport it as one access lost + one
+    gained.
 
-    Tries the precise xml_id match first (renamed_by_xmlid - exact, no risk
-    of a coincidental name collision), falling back to the (category, name)
-    text match (renamed_pairs) only when the removed side has no xml_id."""
+    Tries three things, in order:
+    1. Same xml_id present on both sides - this is the exact same group no
+       matter what its display text says on either side. Two live instances
+       (or two versions of the same instance) can show different text for
+       an identical, unrenamed group - e.g. an ir.module.category name that
+       merely differs in casing ("Point Of Sale" vs "Point of Sale")
+       between them - and that has nothing to do with Odoo actually
+       renaming anything. version is None here since there's no version to
+       tag it with, it's not a tracked rename, just the same identity.
+    2. A known rename link (renamed_by_xmlid, sourced from
+       resolve_renames.py's real OpenUpgrade data) - a real, version-tagged
+       rename Odoo itself made.
+    3. The (category, name) text match (renamed_pairs), only when the
+       removed side has no xml_id at all."""
     removed, added = set(removed), set(added)
 
     added_by_xmlid, added_by_display = {}, {}
@@ -583,7 +616,10 @@ def find_renames(removed, added, renamed_pairs, renamed_by_xmlid):
         old_xmlid, old_display = parse_group_entry(old_raw)
         match_raw, version = None, None
 
-        if old_xmlid:
+        if old_xmlid and old_xmlid in added_by_xmlid:
+            match_raw, version = added_by_xmlid[old_xmlid], None
+
+        if match_raw is None and old_xmlid:
             for new_xmlid, v in renamed_by_xmlid.get(old_xmlid, []):
                 if new_xmlid in added_by_xmlid:
                     match_raw, version = added_by_xmlid[new_xmlid], v

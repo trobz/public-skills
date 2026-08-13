@@ -19,6 +19,7 @@ KEY_ORDER = [
     "name",
     "also_named",
     "category",
+    "also_category",
     "module",
     "ce_or_ee",
     "purpose",
