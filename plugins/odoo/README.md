@@ -1,7 +1,7 @@
 # Odoo Plugin
 
-Odoo data inspection, querying, access-rights comparison, and Access Rights groups
-cataloging toolkit using the `odooly` CLI.
+Odoo data inspection, querying, access-rights comparison, Access Rights groups
+cataloging, and user listing toolkit using the `odooly` CLI.
 
 ## Requirements
 
@@ -20,6 +20,7 @@ claude plugin install odoo
 |-------|-------------|
 | **odooly** | Query and inspect Odoo data using odooly CLI |
 | **access-rights-groups** | Generate an exhaustive, purpose-documented catalog of Odoo Access Rights groups (`res.groups`), reusable across every project |
+| **list-users** | List Odoo users, defaulting to active users with a currently-enabled `base_user_role` role |
 
 ## Usage
 
@@ -30,6 +31,8 @@ claude plugin install odoo
 /odoo:odooly compare access rights between 2 envs
 /odoo:access-rights-groups generate a roles page for instance production
 /odoo:access-rights-groups sync the known groups list against staging
+/odoo:list-users list users on production
+/odoo:list-users who's missing a role on staging
 ```
 
 Or simply ask to query Odoo data in natural language:
