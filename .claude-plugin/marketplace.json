@@ -13,8 +13,8 @@
     {
       "name": "odoo",
       "source": "./plugins/odoo",
-      "description": "Odoo data inspection, querying, access-rights comparison, and Access Rights groups cataloging toolkit using odooly CLI",
-      "version": "0.2.0",
+      "description": "Odoo data inspection, querying, access-rights comparison, Access Rights groups cataloging, and user listing toolkit using odooly CLI",
+      "version": "0.4.0",
       "author": {
         "name": "Trobz"
       },
@@ -28,7 +28,8 @@
         "access-rights",
         "groups",
         "roles",
-        "permissions"
+        "permissions",
+        "users"
       ]
     },
     {

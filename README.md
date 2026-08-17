@@ -54,8 +54,8 @@ npx skills add ~/code/trobz/packages/public-skills -a <agent> -g
 
 ### Odoo
 
-Odoo data inspection, querying, access-rights comparison, and Access Rights groups
-cataloging toolkit using the `odooly` CLI.
+Odoo data inspection, querying, access-rights comparison, Access Rights groups
+cataloging, and user listing toolkit using the `odooly` CLI.
 
 **Installation:**
 
@@ -74,6 +74,7 @@ claude plugin install odoo
 |-------|-------------|
 | **odooly** | Query and inspect Odoo data using odooly CLI |
 | **access-rights-groups** | Generate an exhaustive, purpose-documented catalog of Odoo Access Rights groups (`res.groups`), reusable across every project |
+| **list-users** | List Odoo users, defaulting to active users with a currently-enabled `base_user_role` role |
 
 **Examples:**
 
@@ -82,6 +83,7 @@ claude plugin install odoo
 /odoo:odooly show sale orders in state done
 /odoo:odooly compare access rights between 2 envs
 /odoo:access-rights-groups generate a roles page for instance production
+/odoo:list-users who's missing a role on staging
 ```
 
 Or ask naturally: "Show me all sale orders from partner Trobz"
