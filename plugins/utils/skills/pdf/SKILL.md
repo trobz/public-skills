@@ -13,6 +13,7 @@ Three focused operations for PDF document processing.
 
 - **`uv`** — Python package manager (<https://docs.astral.sh/uv/>). Python deps install automatically on first `uv run`.
 - **OCR only**: system `tesseract` binary (`apt install tesseract-ocr` / `brew install tesseract`).
+- **Non-English OCR**: install the matching tessdata (e.g. `apt install tesseract-ocr-vie`) and pass `--lang`. Without it, Tesseract silently falls back to English and mangles non-Latin/diacritic text (e.g. Vietnamese `hoặc` → `hodc`) instead of erroring.
 - `${CLAUDE_PLUGIN_ROOT}` must be set to the plugin root.
 
 ---
@@ -29,6 +30,7 @@ Use for text-layer PDFs to get agent-ready Markdown with heading detection. Fall
 - PDF is scanned + heading hierarchy doesn't matter → use `markdown` (OCR fallback)
 - PDF is scanned + heading hierarchy critical → use `ocr` + Claude Vision post-processing
 - Need table data → use `tables`
+- PDF is scanned/rasterized in a non-English language → use `markdown` with `--lang` set to that language (see Options below), otherwise OCR runs in English and silently mangles the text
 
 ```bash
 uv run --project "${CLAUDE_PLUGIN_ROOT}/skills/pdf/scripts" python "${CLAUDE_PLUGIN_ROOT}/skills/pdf/scripts/pdf-to-markdown.py" <pdf> [options]
@@ -39,6 +41,7 @@ uv run --project "${CLAUDE_PLUGIN_ROOT}/skills/pdf/scripts" python "${CLAUDE_PLU
 | Flag | Description | Default |
 |------|-------------|---------|
 | `--pages 1-3` | Page range (e.g. `1-3`, `2,4,6`) | All pages |
+| `--lang vie` | Tesseract language code(s) for the OCR fallback on scanned/rasterized content. Use `+` to combine, e.g. `eng+vie` for bilingual documents. Requires matching tessdata installed. | `eng` |
 | `--footer-pattern <regex>` | Regex to strip complex footer noise after automatic cleanup | None |
 | `--no-clean` | Skip automatic page-number and repeated-footer cleanup | Off |
 | `--output out.md` | Write result to file instead of stdout | stdout |
@@ -52,9 +55,14 @@ python pdf-to-markdown.py document.pdf
 # Pages 1–5, save to file
 python pdf-to-markdown.py document.pdf --pages 1-5 --output doc.md
 
+# Scanned/bilingual Vietnamese-English document
+python pdf-to-markdown.py document.pdf --lang eng+vie --output doc.md
+
 # Strip custom footer pattern (e.g. separator + company name)
 python pdf-to-markdown.py document.pdf --footer-pattern "_{10,}.*?Trobz.*?\n"
 ```
+
+**Rasterized tables (embedded as images, not native PDF text):** some PDFs (e.g. Excel/InDesign exports flattened to images) embed tables as pictures rather than selectable text or vector grid lines. In these cases OCR extracts raw text from the picture region without any row/column structure, so the resulting Markdown table can be scrambled (columns interleaved, cells merged) even with the correct `--lang`. Signs this is happening: frequent `picture [...] intentionally omitted` / `Start of picture text` markers around garbled tables. There is no reliable automated fix for this — cross-check any figures pulled from such tables against the original PDF (or a rendered page image) rather than trusting the Markdown output verbatim.
 
 **Footer cleanup workflow:**
 
