@@ -106,10 +106,10 @@ def _stdout_to_stderr():
         os.close(saved_fd)
 
 
-def pdf_to_markdown(pdf_path: str, pages: list[int] | None = None) -> str:
+def pdf_to_markdown(pdf_path: str, pages: list[int] | None = None, ocr_language: str = "eng") -> str:
     import pymupdf4llm
 
-    kwargs: dict = {}
+    kwargs: dict = {"ocr_language": ocr_language}
     if pages:
         # pymupdf4llm uses 0-based page indices
         kwargs["pages"] = [p - 1 for p in pages]
@@ -122,6 +122,13 @@ def main():
     parser = argparse.ArgumentParser(description="Convert PDF to Markdown")
     parser.add_argument("pdf", help="Path to the PDF file")
     parser.add_argument("--pages", help="Page range, e.g. 1-3 or 2,4,6")
+    parser.add_argument(
+        "--lang",
+        default="eng",
+        help="Tesseract language code(s) for the OCR fallback (default: eng). "
+        "Use the document's language for scanned/rasterized content, e.g. 'vie' or "
+        "'eng+vie' for bilingual documents. Requires the matching tessdata to be installed.",
+    )
     parser.add_argument("--footer-pattern", help="Regex to strip repeating footer noise")
     parser.add_argument("--no-clean", action="store_true", help="Skip footer cleaning")
     parser.add_argument("--output", help="Write output to this file instead of stdout")
@@ -130,7 +137,7 @@ def main():
     check_deps()
 
     pages = parse_pages(args.pages) if args.pages else None
-    md = pdf_to_markdown(args.pdf, pages=pages)
+    md = pdf_to_markdown(args.pdf, pages=pages, ocr_language=args.lang)
 
     if not args.no_clean:
         md = clean_footers(md, args.footer_pattern)
